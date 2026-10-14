@@ -3,9 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes" />
-    <title>BU3DC#</title>
-    <link rel="icon" type="image/jpeg" href="Лого.jpg">
-    <link rel="apple-touch-icon" href="Лого.jpg">
+    <title>BU3DCS</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -151,8 +149,6 @@
       }
       .parent-plate:hover { background: rgba(255, 82, 82, 0.14); }
 
-      /* Раскрытие: max-height управляется из JS, отступы живут на внутренней обёртке,
-         поэтому анимация идёт одним плавным переходом без рывков */
       .expanded-content {
         max-height: 0;
         overflow: hidden;
@@ -160,8 +156,6 @@
         transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
       }
       .content-inner { padding: 1.4rem; }
-      /* Сдвиг содержимого родительского раздела вправо: надписи и картинки
-         больше не упираются в левый край */
       .parent-content {
         background: transparent;
       }
@@ -401,12 +395,12 @@
   </head>
   <body>
     <!-- INTRO -->
-    <div id="intro"><div class="intro-text">BU3DC#</div></div>
+    <div id="intro"><div class="intro-text">BU3DCS</div></div>
 
     <!-- HEADER -->
     <header>
       <div class="logo">
-        <img src="Лого.jpg" alt="BU3DC#" />
+        <img src="Лого.jpg" alt="BU3DCS" />
       </div>
       <nav>
         <ul>
@@ -420,7 +414,7 @@
       <!-- О НАС -->
       <section id="about">
         <h2>О нас</h2>
-        <p><strong>BU3DC#</strong> — инди-команда, делаем 3D и анимации. Экспериментируем, выкладываем наработки, показываем процесс.</p>
+        <p><strong>BU3DCS</strong> — инди-команда, делаем 3D и анимации. Экспериментируем, выкладываем наработки, показываем процесс.</p>
         <p>Что значит название:</p>
         <ul style="padding-left: 1.2rem;">
           <li><strong>B — Blender:</strong> все наши 3D-штуки.</li>
@@ -443,6 +437,10 @@
           <div class="team-member-card" onclick="openMemberModal('Node', 'N.jpg')">
             <img src="N.jpg" alt="Node" class="team-img">
             <span style="font-family:'JetBrains Mono',monospace; font-size:1.1rem; color:#fff;">Node</span>
+          </div>
+          <div class="team-member-card" onclick="openMemberModal('Dexilon333', 'D.jpg')">
+            <img src="D.jpg" alt="Dexilon333" class="team-img">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:1.1rem; color:#fff;">Dexilon333</span>
           </div>
         </div>
       </section>
@@ -484,7 +482,7 @@
             <div class="expanded-content">
               <div class="viewer-container" data-viewer="v1">
                 <img src="B 19.09.2026.png" alt="Скриншот проекта" class="viewer-image" data-viewer-img="v1">
-                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v1', event)"><img src="D.jpg" alt="Скачать" class="dl-icon"></button>
+                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v1', event)"><img src="download.jpg" alt="Скачать" class="dl-icon"></button>
                 <button class="fs-btn" title="Развернуть на весь экран" onclick="toggleFullscreen('v1')">
                   <img src="R.png" alt="Развернуть" class="fs-icon">
                 </button>
@@ -502,7 +500,7 @@
             <div class="expanded-content">
               <div class="viewer-container" data-viewer="v2">
                 <img src="В 20.09.2026.png" alt="Скриншот проекта" class="viewer-image" data-viewer-img="v2">
-                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v2', event)"><img src="D.jpg" alt="Скачать" class="dl-icon"></button>
+                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v2', event)"><img src="download.jpg" alt="Скачать" class="dl-icon"></button>
                 <button class="fs-btn" title="Развернуть на весь экран" onclick="toggleFullscreen('v2')">
                   <img src="R.png" alt="Развернуть" class="fs-icon">
                 </button>
@@ -520,7 +518,7 @@
             <div class="expanded-content">
               <div class="viewer-container" data-viewer="v3">
                 <img src="В 21.09.2026 (1).png" alt="Скриншот проекта" class="viewer-image" data-viewer-img="v3">
-                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v3', event)"><img src="D.jpg" alt="Скачать" class="dl-icon"></button>
+                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v3', event)"><img src="download.jpg" alt="Скачать" class="dl-icon"></button>
                 <button class="fs-btn" title="Развернуть на весь экран" onclick="toggleFullscreen('v3')">
                   <img src="R.png" alt="Развернуть" class="fs-icon">
                 </button>
@@ -538,7 +536,7 @@
             <div class="expanded-content">
               <div class="viewer-container" data-viewer="v4">
                 <img src="В 21.09.2026 (2).png" alt="Скриншот проекта" class="viewer-image" data-viewer-img="v4">
-                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v4', event)"><img src="D.jpg" alt="Скачать" class="dl-icon"></button>
+                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v4', event)"><img src="download.jpg" alt="Скачать" class="dl-icon"></button>
                 <button class="fs-btn" title="Развернуть на весь экран" onclick="toggleFullscreen('v4')">
                   <img src="R.png" alt="Развернуть" class="fs-icon">
                 </button>
@@ -556,7 +554,7 @@
             <div class="expanded-content">
               <div class="viewer-container" data-viewer="v5">
                 <img src="В 21.09.2026 (3).png" alt="Скриншот проекта" class="viewer-image" data-viewer-img="v5">
-                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v5', event)"><img src="D.jpg" alt="Скачать" class="dl-icon"></button>
+                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v5', event)"><img src="download.jpg" alt="Скачать" class="dl-icon"></button>
                 <button class="fs-btn" title="Развернуть на весь экран" onclick="toggleFullscreen('v5')">
                   <img src="R.png" alt="Развернуть" class="fs-icon">
                 </button>
@@ -574,7 +572,7 @@
             <div class="expanded-content">
               <div class="viewer-container" data-viewer="v6">
                 <img src="В 21.09.2026 (4).png" alt="Скриншот проекта" class="viewer-image" data-viewer-img="v6">
-                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v6', event)"><img src="D.jpg" alt="Скачать" class="dl-icon"></button>
+                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v6', event)"><img src="download.jpg" alt="Скачать" class="dl-icon"></button>
                 <button class="fs-btn" title="Развернуть на весь экран" onclick="toggleFullscreen('v6')">
                   <img src="R.png" alt="Развернуть" class="fs-icon">
                 </button>
@@ -592,7 +590,7 @@
             <div class="expanded-content">
               <div class="viewer-container" data-viewer="v7">
                 <img src="В 21.09.2026 (5).png" alt="Скриншот проекта" class="viewer-image" data-viewer-img="v7">
-                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v7', event)"><img src="D.jpg" alt="Скачать" class="dl-icon"></button>
+                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v7', event)"><img src="download.jpg" alt="Скачать" class="dl-icon"></button>
                 <button class="fs-btn" title="Развернуть на весь экран" onclick="toggleFullscreen('v7')">
                   <img src="R.png" alt="Развернуть" class="fs-icon">
                 </button>
@@ -621,7 +619,7 @@
                   </div>
                   <span class="video-time" data-time="v8">0:00 / 0:00</span>
                 </div>
-                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v8', event)"><img src="D.jpg" alt="Скачать" class="dl-icon"></button>
+                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v8', event)"><img src="download.jpg" alt="Скачать" class="dl-icon"></button>
                 <button class="fs-btn" title="Развернуть на весь экран" onclick="toggleFullscreen('v8')">
                   <img src="R.png" alt="Развернуть" class="fs-icon">
                 </button>
@@ -650,7 +648,7 @@
                   </div>
                   <span class="video-time" data-time="v9">0:00 / 0:00</span>
                 </div>
-                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v9', event)"><img src="D.jpg" alt="Скачать" class="dl-icon"></button>
+                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v9', event)"><img src="download.jpg" alt="Скачать" class="dl-icon"></button>
                 <button class="fs-btn" title="Развернуть на весь экран" onclick="toggleFullscreen('v9')">
                   <img src="R.png" alt="Развернуть" class="fs-icon">
                 </button>
@@ -679,7 +677,7 @@
                   </div>
                   <span class="video-time" data-time="v10">0:00 / 0:00</span>
                 </div>
-                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v10', event)"><img src="D.jpg" alt="Скачать" class="dl-icon"></button>
+                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v10', event)"><img src="download.jpg" alt="Скачать" class="dl-icon"></button>
                 <button class="fs-btn" title="Развернуть на весь экран" onclick="toggleFullscreen('v10')">
                   <img src="R.png" alt="Развернуть" class="fs-icon">
                 </button>
@@ -717,7 +715,7 @@
                   </div>
                   <span class="video-time" data-time="v11">0:00 / 0:00</span>
                 </div>
-                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v11', event)"><img src="D.jpg" alt="Скачать" class="dl-icon"></button>
+                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v11', event)"><img src="download.jpg" alt="Скачать" class="dl-icon"></button>
                 <button class="fs-btn" title="Развернуть на весь экран" onclick="toggleFullscreen('v11')">
                   <img src="R.png" alt="Развернуть" class="fs-icon">
                 </button>
@@ -753,7 +751,7 @@
     </div>
 
     <footer>
-      <p>2026 BU3DC#</p>
+      <p>2026 BU3DCS</p>
       <p>
         <a href="https://max.ru/join/vPT8vwwFKmhBTC2mWpJXXE1GfBGgfM39xkhnhmS3gz4"
            style="color: var(--muted); text-decoration: underline; font-size: 0.85rem;">
@@ -777,6 +775,9 @@
         ],
         'Node': [
           'Режиссёр', 'Сценарист', 'Unity-разработчик (скрипты)', 'Программист физики/эффектов (скрипты)'
+        ],
+        'Dexilon333': [
+          'Не определенно'
         ]
       };
 
