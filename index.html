@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes" />
+    <title>BU3DC#</title>
+    <link rel="icon" type="image/jpeg" href="Лого.jpg">
+    <link rel="apple-touch-icon" href="Лого.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --bg-dark: #0b0b0d;
+        --panel: #131318;
+        --text: #e3e3e8;
+        --muted: #8f8f96;
+        --accent: #ff5252;
+        --border: #222228;
+        --btn-bg: #1a1a20;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-padding-top: 75px; scroll-behavior: smooth; }
+      body {
+        margin: 0; padding: 0; background: var(--bg-dark); color: var(--text);
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+        line-height: 1.5; overflow-x: hidden;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      /* INTRO */
+      #intro {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+        background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center; pointer-events: none;
+      }
+      .intro-text {
+        font-family: 'JetBrains Mono', monospace; font-weight: 700;
+        font-size: clamp(2.5rem, 12vw, 8rem); color: #fff; letter-spacing: 2px;
+        text-shadow: 0 0 20px rgba(255, 82, 82, 0.6); opacity: 0; animation: fadeInOut 1.8s forwards;
+      }
+      @keyframes fadeInOut {
+        0% { opacity: 0; transform: scale(0.9); }
+        15% { opacity: 1; transform: scale(1.05); }
+        85% { opacity: 1; transform: scale(1.05); }
+        100% { opacity: 0; transform: scale(0.85); }
+      }
+
+      /* HEADER */
+      header {
+        background: rgba(12, 12, 16, 0.94); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        padding: 0.5rem 1rem; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border);
+        display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.7rem;
+      }
+      .logo { flex: 1; min-width: 120px; display: flex; align-items: center; }
+      .logo img { height: calc(3 * 1.4rem); display: block; max-width: 100%; }
+      nav ul { list-style: none; padding: 0; margin: 0; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+      nav a {
+        display: inline-block; padding: 0.4rem 0.7rem; background: var(--btn-bg); border: 1px solid var(--border);
+        color: #ffffff; text-decoration: none; font-family: 'JetBrains Mono', monospace;
+        font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase;
+        transition: all 0.25s ease; white-space: nowrap;
+      }
+      nav a:hover { background: rgba(255,255,255,0.06); transform: translateY(-1px); }
+
+      main { max-width: 1140px; margin: 1rem auto; padding: 0 1rem; }
+      section { scroll-margin-top: 75px; }
+      h2 {
+        font-size: clamp(1.5rem, 5vw, 2rem); border-left: 6px solid var(--accent); padding-left: 1rem;
+        margin-bottom: 2.2rem; color: #fff;
+      }
+      h3 { font-size: clamp(1.1rem, 4vw, 1.3rem); }
+
+      .project-card {
+        background: var(--panel); border: 1px solid var(--border); margin-bottom: 1.8rem;
+        border-radius: 12px; cursor: pointer; display: flex; flex-direction: column;
+        transition: transform 0.3s cubic-bezier(0.17, 0.67, 0.12, 0.99), box-shadow 0.3s ease;
+      }
+      .project-card:hover { transform: translateY(-6px); box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5); }
+      .project-card:active { transform: translateY(-2px); }
+      .card-header-row {
+        display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
+        gap: 0.7rem; padding: 1.2rem 1.4rem; border-bottom: 1px solid var(--border);
+      }
+      .card-title { margin: 0; color: #fff; font-size: clamp(1.1rem, 4vw, 1.45rem); font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+      .card-status {
+        font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; padding: 0.35rem 0.7rem;
+        border-radius: 6px; color: #fff; background: rgba(255,255,255,0.08);
+      }
+      .card-status.status-dev { background: rgba(255, 82, 82, 0.15); color: var(--accent); }
+
+      .team-member-card {
+        display: flex; align-items: center; gap: 12px; cursor: pointer;
+        transition: transform 0.3s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+      }
+      .team-member-card:hover { transform: translateY(-4px); }
+      .team-member-card:active { transform: translateY(-1px); }
+      .team-img {
+        width: 64px; height: 64px; object-fit: cover; border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: transform 0.3s ease, box-shadow 0.3s ease;
+        flex-shrink: 0;
+      }
+      .team-member-card:hover .team-img { transform: scale(1.1); box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+
+      /* МОДАЛЬНОЕ ОКНО */
+      .modal-overlay {
+        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0, 0, 0, 0.92); z-index: 2000; display: none;
+        justify-content: center; align-items: center; padding: 20px;
+      }
+      .modal-overlay.active { display: flex; }
+      .modal-window {
+        background: var(--panel); border: 1px solid var(--border); width: 100%; max-width: 800px;
+        border-radius: 16px; overflow: hidden; box-shadow: 0 32px 64px rgba(0,0,0,0.5);
+        animation: popIn 0.3s cubic-bezier(0.2, 0, 0.3, 1); display: flex; flex-direction: column; max-height: 90vh;
+      }
+      @keyframes popIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+      .modal-header {
+        padding: 1.2rem 1.4rem; border-bottom: 1px solid var(--border);
+        display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
+        position: sticky; top: 0; z-index: 10; background: var(--panel);
+      }
+      .modal-title {
+        margin: 0; color: #fff; font-family: 'JetBrains Mono', monospace;
+        font-size: clamp(1rem, 4vw, 1.3rem); font-weight: 700;
+      }
+      .close-modal {
+        background: none; border: none; color: var(--muted); cursor: pointer;
+        font-size: 1.6rem; line-height: 1; padding: 0.2rem 0.4rem; flex-shrink: 0;
+      }
+      .close-modal:hover { color: #fff; }
+
+      .modal-body {
+        flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+      }
+
+      /* АККОРДЕОН ВЕРСИИ */
+      .version-plate {
+        background: rgba(255,255,255,0.04); border-bottom: 1px solid var(--border); color: #fff;
+        padding: 1rem 1.4rem; display: flex; justify-content: space-between;
+        align-items: center; cursor: pointer; user-select: none;
+        font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; font-weight: 700; transition: background 0.2s;
+      }
+      .version-plate:hover { background: rgba(255,255,255,0.08); }
+      .version-arrow { transition: transform 0.3s ease; flex-shrink: 0; margin-left: 12px; }
+      .version-plate.expanded .version-arrow { transform: rotate(180deg); }
+
+      .parent-plate {
+        background: rgba(255, 82, 82, 0.08); border-bottom: 2px solid var(--accent);
+        font-size: 1rem;
+      }
+      .parent-plate:hover { background: rgba(255, 82, 82, 0.14); }
+
+      /* Раскрытие: max-height управляется из JS, отступы живут на внутренней обёртке,
+         поэтому анимация идёт одним плавным переходом без рывков */
+      .expanded-content {
+        max-height: 0;
+        overflow: hidden;
+        background: rgba(19, 19, 24, 0.4);
+        transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .content-inner { padding: 1.4rem; }
+      /* Сдвиг содержимого родительского раздела вправо: надписи и картинки
+         больше не упираются в левый край */
+      .parent-content {
+        background: transparent;
+      }
+      .parent-content .content-inner {
+        padding: 0.6rem 0.5rem 0.6rem 16px;
+        border-left: 2px solid rgba(255, 82, 82, 0.25);
+        margin-left: 6px;
+      }
+
+      /* ПРОСМОТРЩИК — общий контейнер */
+      .viewer-container {
+        width: 100%; height: auto; background: #000; position: relative;
+        overflow: hidden; border-radius: 8px; margin: 1rem 0;
+      }
+      .viewer-container:fullscreen,
+      .viewer-container:-webkit-full-screen { height: 100vh; }
+      .viewer-image {
+        width: 100%; height: auto; display: block; image-rendering: auto;
+        will-change: transform; user-select: none; -webkit-user-drag: none;
+        cursor: default; transform-origin: center center;
+        transform: translate(0, 0) scale(1);
+      }
+      .viewer-container:fullscreen .viewer-image,
+      .viewer-container:-webkit-full-screen .viewer-image {
+        width: 100%; height: 100%; object-fit: contain;
+      }
+      .viewer-image.can-drag { cursor: grab; }
+      .viewer-image.can-drag:active { cursor: grabbing; }
+
+      /* ВИДЕО-ПРОСМОТРЩИК */
+      .viewer-video {
+        width: 100%; height: auto; display: block; object-fit: contain;
+        background: #000; transform-origin: center center;
+        transform: translate(0, 0) scale(1); will-change: transform;
+        user-select: none; -webkit-user-drag: none;
+      }
+      .viewer-container:fullscreen .viewer-video,
+      .viewer-container:-webkit-full-screen .viewer-video {
+        width: 100%; height: 100%; object-fit: contain;
+      }
+      .viewer-video.can-drag { cursor: grab; }
+      .viewer-video.can-drag:active { cursor: grabbing; }
+
+      /* ПАНЕЛЬ УПРАВЛЕНИЯ ВИДЕО */
+      .video-controls {
+        position: absolute; bottom: 0; left: 0; right: 0;
+        background: linear-gradient(transparent, rgba(0,0,0,0.85));
+        padding: 10px 12px 8px; display: flex; align-items: center; gap: 10px;
+        z-index: 15; opacity: 1; transition: opacity 0.3s ease;
+      }
+      .video-controls.hidden { opacity: 0; pointer-events: none; }
+      .play-btn {
+        background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25);
+        border-radius: 8px; width: 38px; height: 38px; flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; color: #fff; padding: 0; transition: background 0.2s, border-color 0.2s;
+      }
+      .play-btn:hover { background: rgba(255,255,255,0.22); border-color: rgba(255,255,255,0.45); }
+      .play-btn svg { width: 18px; height: 18px; fill: #fff; }
+
+      .video-slider-wrap {
+        flex: 1; display: flex; align-items: center; gap: 8px; min-width: 0;
+      }
+      .video-slider {
+        flex: 1; -webkit-appearance: none; appearance: none; height: 6px;
+        background: rgba(255,255,255,0.2); border-radius: 3px; outline: none;
+        cursor: pointer; min-width: 40px;
+      }
+      .video-slider::-webkit-slider-thumb {
+        -webkit-appearance: none; appearance: none; width: 16px; height: 16px;
+        border-radius: 50%; background: var(--accent); border: 2px solid #fff;
+        cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      }
+      .video-slider::-moz-range-thumb {
+        width: 16px; height: 16px; border-radius: 50%; background: var(--accent);
+        border: 2px solid #fff; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      }
+      .video-time {
+        font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: #fff;
+        white-space: nowrap; flex-shrink: 0; text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+      }
+
+      .fs-btn {
+        position: absolute; bottom: 12px; right: 12px; z-index: 10;
+        width: 40px; height: 40px; background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; padding: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        transition: background 0.2s, border-color 0.2s;
+      }
+      .fs-btn:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.4); }
+      .fs-icon { width: 24px; height: 24px; object-fit: contain; display: block; }
+
+      .dl-btn {
+        position: absolute; bottom: 12px; right: 60px; z-index: 10;
+        width: 40px; height: 40px; background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; padding: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        transition: background 0.2s, border-color 0.2s;
+      }
+      .dl-btn:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.4); }
+      .dl-icon { width: 24px; height: 24px; object-fit: contain; display: block; border-radius: 4px; }
+
+      .viewer-container.has-video .fs-btn { bottom: 58px; }
+      .viewer-container.has-video .dl-btn { bottom: 58px; }
+
+      .modal-desc { color: #fff; font-size: 1rem; line-height: 1.55; margin-bottom: 1.2rem; }
+      .modal-tools { color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
+
+      /* ДИАЛОГ ВВОДА ИМЕНИ ФАЙЛА */
+      .dl-dialog-overlay {
+        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.85); z-index: 5000;
+        display: flex; justify-content: center; align-items: center; padding: 20px;
+      }
+      .dl-dialog {
+        background: var(--panel); border: 1px solid var(--border); border-radius: 16px;
+        width: 100%; max-width: 420px; padding: 1.5rem;
+        box-shadow: 0 32px 64px rgba(0,0,0,0.6);
+        animation: popIn 0.25s cubic-bezier(0.2,0,0.3,1);
+      }
+      .dl-dialog-title {
+        margin: 0 0 1rem; color: #fff; font-family: 'JetBrains Mono', monospace;
+        font-size: 1.1rem; font-weight: 700;
+      }
+      .dl-dialog-label {
+        display: block; color: var(--muted); font-size: 0.85rem; margin-bottom: 0.5rem;
+        font-family: 'JetBrains Mono', monospace;
+      }
+      .dl-dialog-input-wrap {
+        display: flex; align-items: stretch; border: 1px solid var(--border);
+        border-radius: 10px; overflow: hidden; background: var(--btn-bg);
+      }
+      .dl-dialog-input {
+        flex: 1; background: transparent; border: none; outline: none;
+        color: #fff; font-size: 1rem; padding: 0.7rem 0.8rem;
+        font-family: 'JetBrains Mono', monospace; min-width: 0;
+      }
+      .dl-dialog-ext {
+        display: flex; align-items: center; padding: 0.7rem 0.8rem;
+        color: var(--accent); font-family: 'JetBrains Mono', monospace;
+        font-size: 1rem; font-weight: 700; background: rgba(255,82,82,0.08);
+        border-left: 1px solid var(--border); white-space: nowrap;
+      }
+      .dl-dialog-buttons {
+        display: flex; gap: 0.7rem; margin-top: 1.2rem; justify-content: flex-end;
+      }
+      .dl-dialog-btn {
+        padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer;
+        font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 700;
+        border: 1px solid var(--border); transition: background 0.2s, border-color 0.2s;
+      }
+      .dl-dialog-btn-cancel {
+        background: var(--btn-bg); color: var(--muted);
+      }
+      .dl-dialog-btn-cancel:hover { background: rgba(255,255,255,0.08); color: #fff; }
+      .dl-dialog-btn-ok {
+        background: rgba(255,82,82,0.2); color: var(--accent); border-color: rgba(255,82,82,0.3);
+      }
+      .dl-dialog-btn-ok:hover { background: rgba(255,82,82,0.35); color: #fff; }
+
+      /* МОДАЛЬНОЕ ОКНО УЧАСТНИКА */
+      .member-modal-content { display: flex; flex: 1; overflow: hidden; min-height: 0; }
+      .member-modal-img-side {
+        flex: 0 0 45%; max-width: 45%; background: #000;
+        display: flex; align-items: center; justify-content: center; overflow: hidden;
+      }
+      .member-modal-img-side img { width: 100%; height: auto; max-height: 100%; object-fit: contain; display: block; }
+      .member-modal-info-side { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+      .member-roles-header {
+        padding: 0.8rem 1.2rem 0.4rem; color: var(--muted); font-family: 'JetBrains Mono', monospace;
+        font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; flex-shrink: 0;
+      }
+      .member-roles-list {
+        flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+        padding: 0.4rem 1.2rem 1.2rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-content: flex-start;
+      }
+      .member-role-tag {
+        display: inline-block; padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.06);
+        border: 1px solid var(--border); border-radius: 8px; color: var(--text);
+        font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; white-space: nowrap;
+      }
+
+      @media (max-width: 600px) {
+        .modal-overlay { padding: 0; }
+        .modal-window { border-radius: 0; max-height: 100dvh; max-width: 100%; height: 100dvh; }
+        .modal-header { padding: 1rem 1rem; }
+        .modal-title { font-size: 1rem; }
+        .version-plate { padding: 0.9rem 1rem; font-size: 0.82rem; }
+        .content-inner { padding: 1rem; }
+        .parent-content .content-inner { padding-left: 10px; margin-left: 4px; }
+        .card-header-row { padding: 1rem 1.2rem; }
+        .fs-btn { width: 36px; height: 36px; bottom: 10px; right: 10px; }
+        .fs-icon { width: 20px; height: 20px; }
+        .dl-btn { width: 36px; height: 36px; bottom: 10px; right: 54px; }
+        .dl-icon { width: 20px; height: 20px; }
+        .team-img { width: 56px; height: 56px; }
+        header { padding: 0.5rem 0.8rem; }
+        nav a { font-size: 0.78rem; padding: 0.4rem 0.7rem; }
+        main { padding: 0 0.8rem; }
+        .logo img { height: 3.8rem; }
+        .modal-desc { font-size: 0.95rem; }
+        .member-modal-content { flex-direction: column; }
+        .member-modal-img-side { flex: 0 0 auto; max-width: 100%; max-height: 35vh; }
+        .member-modal-img-side img { max-height: 35vh; }
+        .member-roles-list { padding: 0.4rem 1rem 1rem; }
+        .play-btn { width: 34px; height: 34px; }
+        .play-btn svg { width: 15px; height: 15px; }
+        .video-slider { height: 5px; }
+        .video-slider::-webkit-slider-thumb { width: 14px; height: 14px; }
+        .video-slider::-moz-range-thumb { width: 14px; height: 14px; }
+        .video-time { font-size: 0.66rem; }
+        .video-controls { padding: 8px 8px 6px; gap: 6px; }
+        .viewer-container.has-video .fs-btn { bottom: 52px; }
+        .viewer-container.has-video .dl-btn { bottom: 52px; }
+        .dl-dialog { padding: 1.2rem; max-width: 90vw; }
+      }
+
+      @media (max-width: 360px) {
+        .intro-text { font-size: 2.5rem; letter-spacing: 1px; }
+        nav a { font-size: 0.7rem; padding: 0.35rem 0.6rem; letter-spacing: 0.5px; }
+        .card-title { font-size: 1rem; }
+        .modal-title { font-size: 0.9rem; }
+        .member-role-tag { font-size: 0.75rem; padding: 0.35rem 0.65rem; }
+        .logo img { height: 3.4rem; }
+      }
+
+      .viewer-container:fullscreen,
+      .viewer-container:-webkit-full-screen { touch-action: none; overscroll-behavior: contain; }
+
+      footer {
+        padding: 3rem 1rem; text-align: center; border-top: 1px solid var(--border);
+        color: var(--muted); font-size: 0.85rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- INTRO -->
+    <div id="intro"><div class="intro-text">BU3DC#</div></div>
+
+    <!-- HEADER -->
+    <header>
+      <div class="logo">
+        <img src="Лого.jpg" alt="BU3DC#" />
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#about">О нас</a></li>
+          <li><a href="#projects">Наши проекты</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <!-- О НАС -->
+      <section id="about">
+        <h2>О нас</h2>
+        <p><strong>BU3DC#</strong> — инди-команда, делаем 3D и анимации. Экспериментируем, выкладываем наработки, показываем процесс.</p>
+        <p>Что значит название:</p>
+        <ul style="padding-left: 1.2rem;">
+          <li><strong>B — Blender:</strong> все наши 3D-штуки.</li>
+          <li><strong>U — Unity:</strong> интерактивность.</li>
+          <li><strong>3D:</strong> объём, свет, ракурсы, движение.</li>
+          <li><strong>C#:</strong> язык логики в Unity.</li>
+        </ul>
+        <p>Мы небольшая команда, много пробуем. Всё выкладываем здесь, чтобы было видно, как из набросков получается что-то своё.</p>
+
+        <h3><strong>В состав команды входят:</strong></h3>
+        <div style="display:flex; flex-direction:column; gap:16px; max-width:320px;">
+          <div class="team-member-card" onclick="openMemberModal('Ophiuchus', 'O.png')">
+            <img src="O.png" alt="Ophiuchus" class="team-img">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:1.1rem; color:#fff;">Ophiuchus</span>
+          </div>
+          <div class="team-member-card" onclick="openMemberModal('Long Сarbine', 'L.jpeg')">
+            <img src="L.jpeg" alt="Long Сarbine" class="team-img">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:1.1rem; color:#fff;">Long Сarbine</span>
+          </div>
+          <div class="team-member-card" onclick="openMemberModal('Node', 'N.jpg')">
+            <img src="N.jpg" alt="Node" class="team-img">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:1.1rem; color:#fff;">Node</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ПРОЕКТЫ -->
+      <section id="projects">
+        <h2>Наши проекты</h2>
+        <article class="project-card" onclick="openProjectModal('Тени города Рэха')">
+          <div class="card-header-row">
+            <h3 class="card-title">Тени города Рэха</h3>
+            <span class="card-status status-dev">В разработке</span>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <!-- МОДАЛЬНОЕ ОКНО ПРОЕКТА -->
+    <div class="modal-overlay" id="projectModalOverlay">
+      <div class="modal-window">
+        <div class="modal-header">
+          <h3 class="modal-title" id="modalProjectTitle">Название проекта</h3>
+          <button class="close-modal" onclick="closeProjectModal()">&times;</button>
+        </div>
+
+        <div class="modal-body" id="modalBody">
+
+          <!-- РОДИТЕЛЬСКИЙ АККОРДЕОН: Сцена архив -->
+          <div class="version-plate parent-plate" onclick="toggleParentAccordion(this)">
+            <span>Сцена архив</span>
+            <span class="version-arrow">&#9660;</span>
+          </div>
+          <div class="expanded-content parent-content">
+
+            <!-- Версия 19.09.2026 -->
+            <div class="version-plate" onclick="toggleVersionContent(this)">
+              <span>Версия 19.09.2026</span>
+              <span class="version-arrow">&#9660;</span>
+            </div>
+            <div class="expanded-content">
+              <div class="viewer-container" data-viewer="v1">
+                <img src="B 19.09.2026.png" alt="Скриншот проекта" class="viewer-image" data-viewer-img="v1">
+                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v1', event)"><img src="D.jpg" alt="Скачать" class="dl-icon"></button>
+                <button class="fs-btn" title="Развернуть на весь экран" onclick="toggleFullscreen('v1')">
+                  <img src="R.png" alt="Развернуть" class="fs-icon">
+                </button>
+              </div>
+              <p class="modal-desc" id="modalDescV1"></p>
+              <p class="modal-tools" id="modalToolsV1"></p>
+              <p class="modal-tools" id="modalAuthorV1"></p>
+            </div>
+
+            <!-- Версия 20.09.2026 -->
+            <div class="version-plate" onclick="toggleVersionContent(this)">
+              <span>Версия 20.09.2026</span>
+              <span class="version-arrow">&#9660;</span>
+            </div>
+            <div class="expanded-content">
+              <div class="viewer-container" data-viewer="v2">
+                <img src="В 20.09.2026.png" alt="Скриншот проекта" class="viewer-image" data-viewer-img="v2">
+                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v2', event)"><img src="D.jpg" alt="Скачать" class="dl-icon"></button>
+                <button class="fs-btn" title="Развернуть на весь экран" onclick="toggleFullscreen('v2')">
+                  <img src="R.png" alt="Развернуть" class="fs-icon">
+                </button>
+              </div>
+              <p class="modal-desc" id="modalDescV2"></p>
+              <p class="modal-tools" id="modalToolsV2"></p>
+              <p class="modal-tools" id="modalAuthorV2"></p>
+            </div>
+
+            <!-- Версия 21.09.2026 (1) -->
+            <div class="version-plate" onclick="toggleVersionContent(this)">
+              <span>Версия 21.09.2026 (1)</span>
+              <span class="version-arrow">&#9660;</span>
+            </div>
+            <div class="expanded-content">
+              <div class="viewer-container" data-viewer="v3">
+                <img src="В 21.09.2026 (1).png" alt="Скриншот проекта" class="viewer-image" data-viewer-img="v3">
+                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v3', event)"><img src="D.jpg" alt="Скачать" class="dl-icon"></button>
+                <button class="fs-btn" title="Развернуть на весь экран" onclick="toggleFullscreen('v3')">
+                  <img src="R.png" alt="Развернуть" class="fs-icon">
+                </button>
+              </div>
+              <p class="modal-desc" id="modalDescV3"></p>
+              <p class="modal-tools" id="modalToolsV3"></p>
+              <p class="modal-tools" id="modalAuthorV3"></p>
+            </div>
+
+            <!-- Версия 21.09.2026 (2) -->
+            <div class="version-plate" onclick="toggleVersionContent(this)">
+              <span>Версия 21.09.2026 (2)</span>
+              <span class="version-arrow">&#9660;</span>
+            </div>
+            <div class="expanded-content">
+              <div class="viewer-container" data-viewer="v4">
+                <img src="В 21.09.2026 (2).png" alt="Скриншот проекта" class="viewer-image" data-viewer-img="v4">
+                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v4', event)"><img src="D.jpg" alt="Скачать" class="dl-icon"></button>
+                <button class="fs-btn" title="Развернуть на весь экран" onclick="toggleFullscreen('v4')">
+                  <img src="R.png" alt="Развернуть" class="fs-icon">
+                </button>
+              </div>
+              <p class="modal-desc" id="modalDescV4"></p>
+              <p class="modal-tools" id="modalToolsV4"></p>
+              <p class="modal-tools" id="modalAuthorV4"></p>
+            </div>
+
+            <!-- Версия 21.09.2026 (3) -->
+            <div class="version-plate" onclick="toggleVersionContent(this)">
+              <span>Версия 21.09.2026 (3)</span>
+              <span class="version-arrow">&#9660;</span>
+            </div>
+            <div class="expanded-content">
+              <div class="viewer-container" data-viewer="v5">
+                <img src="В 21.09.2026 (3).png" alt="Скриншот проекта" class="viewer-image" data-viewer-img="v5">
+                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v5', event)"><img src="D.jpg" alt="Скачать" class="dl-icon"></button>
+                <button class="fs-btn" title="Развернуть на весь экран" onclick="toggleFullscreen('v5')">
+                  <img src="R.png" alt="Развернуть" class="fs-icon">
+                </button>
+              </div>
+              <p class="modal-desc" id="modalDescV5"></p>
+              <p class="modal-tools" id="modalToolsV5"></p>
+              <p class="modal-tools" id="modalAuthorV5"></p>
+            </div>
+
+            <!-- Версия 21.09.2026 (4) -->
+            <div class="version-plate" onclick="toggleVersionContent(this)">
+              <span>Версия 21.09.2026 (4)</span>
+              <span class="version-arrow">&#9660;</span>
+            </div>
+            <div class="expanded-content">
+              <div class="viewer-container" data-viewer="v6">
+                <img src="В 21.09.2026 (4).png" alt="Скриншот проекта" class="viewer-image" data-viewer-img="v6">
+                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v6', event)"><img src="D.jpg" alt="Скачать" class="dl-icon"></button>
+                <button class="fs-btn" title="Развернуть на весь экран" onclick="toggleFullscreen('v6')">
+                  <img src="R.png" alt="Развернуть" class="fs-icon">
+                </button>
+              </div>
+              <p class="modal-desc" id="modalDescV6"></p>
+              <p class="modal-tools" id="modalToolsV6"></p>
+              <p class="modal-tools" id="modalAuthorV6"></p>
+            </div>
+
+            <!-- Версия 21.09.2026 (5) -->
+            <div class="version-plate" onclick="toggleVersionContent(this)">
+              <span>Версия 21.09.2026 (5)</span>
+              <span class="version-arrow">&#9660;</span>
+            </div>
+            <div class="expanded-content">
+              <div class="viewer-container" data-viewer="v7">
+                <img src="В 21.09.2026 (5).png" alt="Скриншот проекта" class="viewer-image" data-viewer-img="v7">
+                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v7', event)"><img src="D.jpg" alt="Скачать" class="dl-icon"></button>
+                <button class="fs-btn" title="Развернуть на весь экран" onclick="toggleFullscreen('v7')">
+                  <img src="R.png" alt="Развернуть" class="fs-icon">
+                </button>
+              </div>
+              <p class="modal-desc" id="modalDescV7"></p>
+              <p class="modal-tools" id="modalToolsV7"></p>
+              <p class="modal-tools" id="modalAuthorV7"></p>
+            </div>
+
+            <!-- Версия 22.09.2026 (ВИДЕО) -->
+            <div class="version-plate" onclick="toggleVersionContent(this)">
+              <span>Версия 22.09.2026</span>
+              <span class="version-arrow">&#9660;</span>
+            </div>
+            <div class="expanded-content">
+              <div class="viewer-container has-video" data-viewer="v8">
+                <video class="viewer-video" data-viewer-video="v8" preload="metadata" playsinline>
+                  <source src="В 22.09.2026.mp4" type="video/mp4">
+                </video>
+                <div class="video-controls" data-controls="v8">
+                  <button class="play-btn" data-play-btn="v8" title="Воспроизвести / Пауза">
+                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  </button>
+                  <div class="video-slider-wrap">
+                    <input type="range" class="video-slider" data-slider="v8" min="0" max="100" value="0" step="0.1">
+                  </div>
+                  <span class="video-time" data-time="v8">0:00 / 0:00</span>
+                </div>
+                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v8', event)"><img src="D.jpg" alt="Скачать" class="dl-icon"></button>
+                <button class="fs-btn" title="Развернуть на весь экран" onclick="toggleFullscreen('v8')">
+                  <img src="R.png" alt="Развернуть" class="fs-icon">
+                </button>
+              </div>
+              <p class="modal-desc" id="modalDescV8"></p>
+              <p class="modal-tools" id="modalToolsV8"></p>
+              <p class="modal-tools" id="modalAuthorV8"></p>
+            </div>
+
+            <!-- Версия 24.09.2026 (ВИДЕО) -->
+            <div class="version-plate" onclick="toggleVersionContent(this)">
+              <span>Версия 24.09.2026</span>
+              <span class="version-arrow">&#9660;</span>
+            </div>
+            <div class="expanded-content">
+              <div class="viewer-container has-video" data-viewer="v9">
+                <video class="viewer-video" data-viewer-video="v9" preload="metadata" playsinline>
+                  <source src="В 24.09.2026.mp4" type="video/mp4">
+                </video>
+                <div class="video-controls" data-controls="v9">
+                  <button class="play-btn" data-play-btn="v9" title="Воспроизвести / Пауза">
+                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  </button>
+                  <div class="video-slider-wrap">
+                    <input type="range" class="video-slider" data-slider="v9" min="0" max="100" value="0" step="0.1">
+                  </div>
+                  <span class="video-time" data-time="v9">0:00 / 0:00</span>
+                </div>
+                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v9', event)"><img src="D.jpg" alt="Скачать" class="dl-icon"></button>
+                <button class="fs-btn" title="Развернуть на весь экран" onclick="toggleFullscreen('v9')">
+                  <img src="R.png" alt="Развернуть" class="fs-icon">
+                </button>
+              </div>
+              <p class="modal-desc" id="modalDescV9"></p>
+              <p class="modal-tools" id="modalToolsV9"></p>
+              <p class="modal-tools" id="modalAuthorV9"></p>
+            </div>
+
+            <!-- Версия 26.09.2026 (ВИДЕО) -->
+            <div class="version-plate" onclick="toggleVersionContent(this)">
+              <span>Версия 26.09.2026</span>
+              <span class="version-arrow">&#9660;</span>
+            </div>
+            <div class="expanded-content">
+              <div class="viewer-container has-video" data-viewer="v10">
+                <video class="viewer-video" data-viewer-video="v10" preload="metadata" playsinline>
+                  <source src="В 26.09.2026.mp4" type="video/mp4">
+                </video>
+                <div class="video-controls" data-controls="v10">
+                  <button class="play-btn" data-play-btn="v10" title="Воспроизвести / Пауза">
+                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  </button>
+                  <div class="video-slider-wrap">
+                    <input type="range" class="video-slider" data-slider="v10" min="0" max="100" value="0" step="0.1">
+                  </div>
+                  <span class="video-time" data-time="v10">0:00 / 0:00</span>
+                </div>
+                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v10', event)"><img src="D.jpg" alt="Скачать" class="dl-icon"></button>
+                <button class="fs-btn" title="Развернуть на весь экран" onclick="toggleFullscreen('v10')">
+                  <img src="R.png" alt="Развернуть" class="fs-icon">
+                </button>
+              </div>
+              <p class="modal-desc" id="modalDescV10"></p>
+              <p class="modal-tools" id="modalToolsV10"></p>
+              <p class="modal-tools" id="modalAuthorV10"></p>
+            </div>
+
+          </div><!-- /parent-content Сцена архив -->
+
+          <!-- РОДИТЕЛЬСКИЙ АККОРДЕОН: Город -->
+          <div class="version-plate parent-plate" onclick="toggleParentAccordion(this)">
+            <span>Город</span>
+            <span class="version-arrow">&#9660;</span>
+          </div>
+          <div class="expanded-content parent-content">
+
+            <!-- Версия 29.09.2026 (ВИДЕО) -->
+            <div class="version-plate" onclick="toggleVersionContent(this)">
+              <span>Версия 29.09.2026</span>
+              <span class="version-arrow">&#9660;</span>
+            </div>
+            <div class="expanded-content">
+              <div class="viewer-container has-video" data-viewer="v11">
+                <video class="viewer-video" data-viewer-video="v11" preload="metadata" playsinline>
+                  <source src="В 29.09.2026.mp4" type="video/mp4">
+                </video>
+                <div class="video-controls" data-controls="v11">
+                  <button class="play-btn" data-play-btn="v11" title="Воспроизвести / Пауза">
+                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  </button>
+                  <div class="video-slider-wrap">
+                    <input type="range" class="video-slider" data-slider="v11" min="0" max="100" value="0" step="0.1">
+                  </div>
+                  <span class="video-time" data-time="v11">0:00 / 0:00</span>
+                </div>
+                <button class="dl-btn" title="Скачать" onclick="downloadMedia('v11', event)"><img src="D.jpg" alt="Скачать" class="dl-icon"></button>
+                <button class="fs-btn" title="Развернуть на весь экран" onclick="toggleFullscreen('v11')">
+                  <img src="R.png" alt="Развернуть" class="fs-icon">
+                </button>
+              </div>
+              <p class="modal-desc" id="modalDescV11"></p>
+              <p class="modal-tools" id="modalToolsV11"></p>
+              <p class="modal-tools" id="modalAuthorV11"></p>
+            </div>
+
+          </div><!-- /parent-content Город -->
+
+        </div><!-- /modal-body -->
+      </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО УЧАСТНИКА -->
+    <div class="modal-overlay" id="memberModalOverlay"></div>
+
+    <!-- ДИАЛОГ ВВОДА ИМЕНИ ФАЙЛА -->
+    <div class="dl-dialog-overlay" id="dlDialogOverlay" style="display:none;">
+      <div class="dl-dialog">
+        <h3 class="dl-dialog-title">Скачать файл</h3>
+        <label class="dl-dialog-label" for="dlFilenameInput">Имя файла:</label>
+        <div class="dl-dialog-input-wrap">
+          <input type="text" class="dl-dialog-input" id="dlFilenameInput" autocomplete="off" spellcheck="false">
+          <span class="dl-dialog-ext" id="dlFileExt"></span>
+        </div>
+        <div class="dl-dialog-buttons">
+          <button class="dl-dialog-btn dl-dialog-btn-cancel" onclick="closeDlDialog()">Отмена</button>
+          <button class="dl-dialog-btn dl-dialog-btn-ok" onclick="confirmDlDownload()">Скачать</button>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>2026 BU3DC#</p>
+      <p>
+        <a href="https://max.ru/join/vPT8vwwFKmhBTC2mWpJXXE1GfBGgfM39xkhnhmS3gz4"
+           style="color: var(--muted); text-decoration: underline; font-size: 0.85rem;">
+          Мы в Max
+        </a>
+      </p>
+    </footer>
+
+    <script>
+      // --- 0. Роли участников ---
+      const memberRoles = {
+        'Ophiuchus': [
+          'Режиссёр', 'Сценарист', 'Концепт-художник (наброски)', 'Художник по персонажам',
+          'Художник по окружению', '3D-моделлер', 'Риггер (кости)', 'Аниматор',
+          'Текстурщик', 'VFX-художник (спецэффекты)', 'Художник по свету', 'Технический художник',
+          'Продюсер', 'Тестировщик'
+        ],
+        'Long Сarbine': [
+          '3D-моделлер', 'Аниматор', 'Текстурщик', 'UI/UX-дизайнер (дизайнер интерфейса)', 'Композитор',
+          'Саунд-дизайнер (звуковые эффекты)', 'Актёр озвучки', 'Звукорежиссёр', 'Тестировщик'
+        ],
+        'Node': [
+          'Режиссёр', 'Сценарист', 'Unity-разработчик (скрипты)', 'Программист физики/эффектов (скрипты)'
+        ]
+      };
+
+      // --- 0a. Состояние диалога скачивания ---
+      let dlPending = null; // { src, ext }
+
+      // --- 0b. Оборачиваем содержимое аккордеонов (один раз) ---
+      document.querySelectorAll('.expanded-content').forEach(content => {
+        if (content.querySelector(':scope > .content-inner')) return;
+        const inner = document.createElement('div');
+        inner.className = 'content-inner';
+        while (content.firstChild) inner.appendChild(content.firstChild);
+        content.appendChild(inner);
+      });
+
+      // --- 1. Интро ---
+      const introEl = document.getElementById('intro');
+      if (introEl) {
+        introEl.addEventListener('animationend', () => {
+          introEl.style.display = 'none';
+          introEl.style.pointerEvents = 'none';
+        });
+      }
+
+      // --- 2. Модальное окно проекта ---
+      function openProjectModal(title) {
+        const overlay = document.getElementById('projectModalOverlay');
+        document.getElementById('modalProjectTitle').textContent = title;
+
+        // --- Версия 19.09.2026 ---
+        document.getElementById('modalDescV1').textContent =
+          'Пока не скажу, что это и не раскрою сюжет, но скажу, что начал делать первую сцену архива (на фото один из этапов).';
+        document.getElementById('modalToolsV1').textContent = 'Инструменты: Blender';
+        document.getElementById('modalAuthorV1').textContent = '-Ophiuchus';
+
+        // --- Версия 20.09.2026 ---
+        document.getElementById('modalDescV2').textContent = 'А вот и архивист! (предварительная версия)';
+        document.getElementById('modalToolsV2').textContent = 'Инструменты: Blender';
+        document.getElementById('modalAuthorV2').textContent = '-Ophiuchus';
+
+        // --- Версия 21.09.2026 (1) ---
+        document.getElementById('modalDescV3').textContent = 'Ящики теперь ящики, а не коробки.';
+        document.getElementById('modalToolsV3').textContent = 'Инструменты: Blender';
+        document.getElementById('modalAuthorV3').textContent = '-Ophiuchus';
+
+        // --- Версия 21.09.2026 (2) ---
+        document.getElementById('modalDescV4').textContent = 'Добавлены лампочки, вместо света из ниоткуда.';
+        document.getElementById('modalToolsV4').textContent = 'Инструменты: Blender';
+        document.getElementById('modalAuthorV4').textContent = '-Ophiuchus';
+
+        // --- Версия 21.09.2026 (3) ---
+        document.getElementById('modalDescV5').textContent = 'Добавлен стол с ноутбуком, на котором открыт браузер.';
+        document.getElementById('modalToolsV5').textContent = 'Инструменты: Blender';
+        document.getElementById('modalAuthorV5').textContent = '-Ophiuchus';
+
+        // --- Версия 21.09.2026 (4) ---
+        document.getElementById('modalDescV6').textContent = 'В одном из ящиков теперь лежит старинная книга.';
+        document.getElementById('modalToolsV6').textContent = 'Инструменты: Blender';
+        document.getElementById('modalAuthorV6').textContent = '-Ophiuchus';
+
+        // --- Версия 21.09.2026 (5) ---
+        document.getElementById('modalDescV7').textContent = 'Теперь в сцене есть персонаж с симуляцией ткани.';
+        document.getElementById('modalToolsV7').textContent = 'Инструменты: Blender';
+        document.getElementById('modalAuthorV7').textContent = '-Ophiuchus';
+
+        // --- Версия 22.09.2026 (ВИДЕО) ---
+        document.getElementById('modalDescV8').textContent =
+          'Нет, это не итоговая сцена, а проверка модификаторов! 😅';
+        document.getElementById('modalToolsV8').textContent = 'Инструменты: Blender';
+        document.getElementById('modalAuthorV8').textContent = '-Ophiuchus';
+
+        // --- Версия 24.09.2026 (ВИДЕО) ---
+        document.getElementById('modalDescV9').textContent =
+          'Часть рабочего процесса и предварительный результат.';
+        document.getElementById('modalToolsV9').textContent = 'Инструменты: Blender';
+        document.getElementById('modalAuthorV9').textContent = '-Ophiuchus';
+
+        // --- Версия 26.09.2026 (ВИДЕО) ---
+        document.getElementById('modalDescV10').textContent =
+          'Пересоздаю персонажа, часть первая.';
+        document.getElementById('modalToolsV10').textContent = 'Инструменты: Blender';
+        document.getElementById('modalAuthorV10').textContent = '-Ophiuchus';
+
+        // --- Версия 29.09.2026 (ВИДЕО) ---
+        document.getElementById('modalDescV11').textContent = 'Планировка города.';
+        document.getElementById('modalToolsV11').textContent = 'Инструменты: Blender';
+        document.getElementById('modalAuthorV11').textContent = '-Ophiuchus';
+
+        // Сброс всех аккордеонов
+        resetAccordions();
+        overlay.classList.add('active');
+
+        // Инициализация просмотрщиков
+        for (const vid of ['v1','v2','v3','v4','v5','v6','v7','v8','v9','v10','v11']) {
+          initViewer(vid);
+        }
+
+        document.getElementById('modalBody').scrollTop = 0;
+      }
+
+      function closeProjectModal() {
+        document.getElementById('projectModalOverlay').classList.remove('active');
+        resetAccordions();
+        // Останавливаем все видео
+        Object.keys(viewers).forEach(vid => {
+          const v = viewers[vid];
+          if (v && v.video) {
+            v.video.pause();
+          }
+        });
+      }
+
+      document.getElementById('projectModalOverlay').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) closeProjectModal();
+      });
+
+      // --- 3. Сброс всех аккордеонов ---
+      function resetAccordions() {
+        document.querySelectorAll('.expanded-content').forEach(content => {
+          content.classList.remove('active');
+          content.style.maxHeight = null;
+        });
+        document.querySelectorAll('.version-plate').forEach(plate => {
+          plate.classList.remove('expanded');
+          const arrow = plate.querySelector('.version-arrow');
+          if (arrow) arrow.textContent = '\u25BC';
+        });
+      }
+
+      // --- 3a. Плавное раскрытие ---
+      function smoothExpand(content, afterExpand) {
+        content.classList.add('active');
+        // высота контента: реальный scrollHeight, а не доля экрана
+        content.style.maxHeight = content.scrollHeight + 'px';
+        const onEnd = (e) => {
+          if (e.target !== content || e.propertyName !== 'max-height') return;
+          content.removeEventListener('transitionend', onEnd);
+          content.style.maxHeight = 'none';
+          if (afterExpand) afterExpand();
+        };
+        content.addEventListener('transitionend', onEnd);
+      }
+
+      // --- 3b. Плавное сворачивание ---
+      function smoothCollapse(content, afterCollapse) {
+        // если высота уже 'none' — фиксируем текущую высоту перед анимацией
+        if (getComputedStyle(content).maxHeight === 'none') {
+          content.style.maxHeight = content.scrollHeight + 'px';
+        }
+        void content.offsetHeight; // фиксируем стартовую высоту
+        content.style.maxHeight = '0px';
+        const onEnd = (e) => {
+          if (e.target !== content || e.propertyName !== 'max-height') return;
+          content.removeEventListener('transitionend', onEnd);
+          content.classList.remove('active');
+          content.style.maxHeight = null;
+          if (afterCollapse) afterCollapse();
+        };
+        content.addEventListener('transitionend', onEnd);
+      }
+
+      // --- 3c. Очистка состояния контента (защита от «залипших» состояний) ---
+      function clearContentState(content) {
+        content.classList.remove('active');
+        content.style.maxHeight = null;
+      }
+
+      // --- 4. Родительский аккордеон ---
+      function toggleParentAccordion(plate) {
+        const content = plate.nextElementSibling;
+        const isExpanded = plate.classList.contains('expanded');
+
+        if (!isExpanded) {
+          plate.classList.add('expanded');
+          smoothExpand(content, () => {
+            setTimeout(() => { document.getElementById('modalBody').scrollTop = 0; }, 50);
+          });
+        } else {
+          plate.classList.remove('expanded');
+          smoothCollapse(content, () => {
+            document.getElementById('modalBody').scrollTop = 0;
+          });
+        }
+      }
+
+      // --- 5. Аккордеон версии (каждая версия независима, другие не скрываются) ---
+      function toggleVersionContent(plate) {
+        const content = plate.nextElementSibling;
+        const isExpanded = plate.classList.contains('expanded');
+
+        if (!isExpanded) {
+          plate.classList.add('expanded');
+          smoothExpand(content, () => {
+            document.getElementById('modalBody').scrollTop = 0;
+          });
+        } else {
+          plate.classList.remove('expanded');
+          smoothCollapse(content, () => {
+            document.getElementById('modalBody').scrollTop = 0;
+          });
+        }
+      }
+
+      // --- 6. Сворачивание всех версий ---
+      function collapseAllVersions() {
+        document.querySelectorAll('.version-plate').forEach(p => {
+          p.classList.remove('expanded');
+          const a = p.querySelector('.version-arrow');
+          if (a) a.textContent = '\u25BC';
+        });
+        document.querySelectorAll('.expanded-content').forEach(c => {
+          clearContentState(c);
+        });
+        document.getElementById('modalBody').scrollTop = 0;
+      }
+
+      // --- 7. Модальное окно участника ---
+      function openMemberModal(name, imgSrc) {
+        const existing = document.getElementById('memberModalOverlay');
+        if (existing) existing.remove();
+
+        const overlay = document.createElement('div');
+        overlay.id = 'memberModalOverlay';
+        overlay.style.cssText = `
+          position:fixed; top:0; left:0; right:0; bottom:0;
+          background:rgba(0,0,0,0.92); z-index:3000;
+          display:flex; justify-content:center; align-items:center;
+          padding:20px;
+        `;
+        overlay.classList.add('modal-overlay');
+        overlay.style.display = 'flex';
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+          background:var(--panel); border:1px solid var(--border);
+          border-radius:16px; overflow:hidden;
+          box-shadow:0 32px 64px rgba(0,0,0,0.5);
+          max-width:90vw; max-height:90vh;
+          display:flex; flex-direction:column;
+          width:100%; max-width:700px;
+        `;
+
+        const header = document.createElement('div');
+        header.style.cssText = `padding:14px 18px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-shrink:0;`;
+        const h3 = document.createElement('h3');
+        h3.textContent = name;
+        h3.style.cssText = `margin:0; color:#fff; font-family:'JetBrains Mono',monospace; font-weight:700; font-size:1.3rem;`;
+        const closeBtn = document.createElement('button');
+        closeBtn.textContent = '\u00D7';
+        closeBtn.style.cssText = `background:none; border:none; color:var(--muted); cursor:pointer; font-size:1.6rem; line-height:1; padding:0 4px; flex-shrink:0;`;
+        closeBtn.addEventListener('click', () => overlay.remove());
+        header.appendChild(h3); header.appendChild(closeBtn); modal.appendChild(header);
+
+        const content = document.createElement('div');
+        content.className = 'member-modal-content';
+        const imgSide = document.createElement('div');
+        imgSide.className = 'member-modal-img-side';
+        const img = document.createElement('img');
+        img.src = imgSrc; img.alt = name;
+        imgSide.appendChild(img);
+
+        const infoSide = document.createElement('div');
+        infoSide.className = 'member-modal-info-side';
+        const rolesHeader = document.createElement('div');
+        rolesHeader.className = 'member-roles-header';
+        rolesHeader.textContent = 'Чем занимается';
+        infoSide.appendChild(rolesHeader);
+        const rolesList = document.createElement('div');
+        rolesList.className = 'member-roles-list';
+        const roles = memberRoles[name] || [];
+        roles.forEach(role => {
+          const tag = document.createElement('span');
+          tag.className = 'member-role-tag';
+          tag.textContent = role;
+          rolesList.appendChild(tag);
+        });
+        infoSide.appendChild(rolesList);
+        content.appendChild(imgSide); content.appendChild(infoSide);
+        modal.appendChild(content);
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
+      }
+
+      // --- 8. ЛОГИКА ПРОСМОТРЩИКА ---
+      const viewers = {};
+
+      const PLAY_ICON = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+      const PAUSE_ICON = '<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+
+      function initViewer(vid) {
+        const container = document.querySelector('[data-viewer="' + vid + '"]');
+        if (!container) return;
+
+        const newContainer = container.cloneNode(true);
+        container.parentNode.replaceChild(newContainer, container);
+
+        const newImg = newContainer.querySelector('.viewer-image');
+        const newVideo = newContainer.querySelector('.viewer-video');
+        const newFsBtn = newContainer.querySelector('.fs-btn');
+        const newDlBtn = newContainer.querySelector('.dl-btn');
+
+        if (newFsBtn) newFsBtn.setAttribute('onclick', 'toggleFullscreen(\'' + vid + '\')');
+        if (newDlBtn) newDlBtn.setAttribute('onclick', 'downloadMedia(\'' + vid + '\', event)');
+
+        viewers[vid] = {
+          panX: 0, panY: 0, scale: 1,
+          isDragging: false, lastX: 0, lastY: 0,
+          initialDistance: 0, initialScale: 1,
+          initialPanX: 0, initialPanY: 0,
+          pinchCenterX: 0, pinchCenterY: 0,
+          isFullscreen: false,
+          container: newContainer,
+          img: newImg,
+          video: newVideo,
+          isVideo: !!newVideo
+        };
+
+        newContainer.addEventListener('wheel', (e) => handleWheel(e, vid), { passive: false });
+        newContainer.addEventListener('mousedown', (e) => handleMouseDown(e, vid));
+        window.addEventListener('mouseup', () => handleMouseUp(vid));
+        window.addEventListener('mousemove', (e) => handleMouseMove(e, vid));
+        newContainer.addEventListener('touchstart', (e) => handleTouchStart(e, vid), { passive: false });
+        newContainer.addEventListener('touchmove', (e) => handleTouchMove(e, vid), { passive: false });
+        window.addEventListener('touchend', () => handleTouchEnd(vid));
+
+        if (newVideo) {
+          initVideoControls(vid, newContainer, newVideo);
+        }
+
+        updateTransform(vid);
+      }
+
+      // --- 8a. СКАЧИВАНИЕ МЕДИА ---
+      function downloadMedia(vid, ev) {
+        // Немедленно останавливаем всплытие, чтобы не сработал fullscreen
+        if (ev) {
+          ev.stopPropagation();
+          ev.preventDefault();
+        }
+        if (window.event) {
+          window.event.stopPropagation();
+          window.event.preventDefault();
+        }
+
+        const v = viewers[vid];
+        if (!v) return;
+
+        let src = '';
+        let ext = '';
+
+        if (v.isVideo && v.video) {
+          const source = v.video.querySelector('source');
+          src = source ? source.src : v.video.src;
+          ext = '.mp4';
+        } else if (v.img) {
+          src = v.img.src;
+          ext = '.png';
+        }
+
+        if (!src) return;
+
+        // Извлекаем имя файла без расширения для подсказки в инпуте
+        const filename = src.split('/').pop() || 'file';
+        const baseName = filename.replace(/\.[^.]+$/, '');
+
+        // Показываем диалог ввода имени
+        dlPending = { src: src, ext: ext };
+        const input = document.getElementById('dlFilenameInput');
+        const extSpan = document.getElementById('dlFileExt');
+        input.value = baseName;
+        extSpan.textContent = ext;
+
+        const overlay = document.getElementById('dlDialogOverlay');
+        overlay.style.display = 'flex';
+
+        // Фокус на инпут + выделение
+        setTimeout(() => {
+          input.focus();
+          input.select();
+        }, 50);
+
+        // Enter = скачать, Escape = отмена
+        input.onkeydown = function(e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            confirmDlDownload();
+          } else if (e.key === 'Escape') {
+            e.preventDefault();
+            closeDlDialog();
+          }
+        };
+      }
+
+      function closeDlDialog() {
+        document.getElementById('dlDialogOverlay').style.display = 'none';
+        dlPending = null;
+      }
+
+      function confirmDlDownload() {
+        if (!dlPending) return;
+
+        const input = document.getElementById('dlFilenameInput');
+        let name = input.value.trim();
+
+        // Удаляем любые расширения, которые пользователь мог вписать
+        name = name.replace(/\.[^.]+$/, '');
+        // Удаляем недопустимые символы для имени файла
+        name = name.replace(/[\\/:*?"<>|]/g, '_');
+        if (!name) name = 'file';
+
+        const fullFilename = name + dlPending.ext;
+
+        // Создаём ссылку с download-атрибутом — это вызовет окно сохранения
+        const a = document.createElement('a');
+        a.href = dlPending.src;
+        a.download = fullFilename;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        // Удаляем ссылку
+        setTimeout(() => { document.body.removeChild(a); }, 200);
+
+        closeDlDialog();
+      }
+
+      // --- 9. УПРАВЛЕНИЕ ВИДЕО ---
+      function initVideoControls(vid, container, video) {
+        const playBtn = container.querySelector('[data-play-btn="' + vid + '"]');
+        const slider = container.querySelector('[data-slider="' + vid + '"]');
+        const timeDisplay = container.querySelector('[data-time="' + vid + '"]');
+        const controls = container.querySelector('[data-controls="' + vid + '"]');
+
+        if (!playBtn || !slider || !timeDisplay) return;
+
+        playBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (video.paused) video.play().catch(() => {});
+          else video.pause();
+        });
+
+        video.addEventListener('play', () => { playBtn.innerHTML = PAUSE_ICON; });
+        video.addEventListener('pause', () => { playBtn.innerHTML = PLAY_ICON; });
+
+        video.addEventListener('timeupdate', () => {
+          if (!slider.dataset.dragging && video.duration) {
+            slider.value = (video.currentTime / video.duration) * 100;
+          }
+          timeDisplay.textContent = formatTime(video.currentTime) + ' / ' + formatTime(video.duration);
+        });
+
+        video.addEventListener('loadedmetadata', () => {
+          timeDisplay.textContent = formatTime(0) + ' / ' + formatTime(video.duration);
+        });
+
+        slider.addEventListener('input', () => {
+          slider.dataset.dragging = 'true';
+          if (video.duration) video.currentTime = (slider.value / 100) * video.duration;
+        });
+        slider.addEventListener('change', () => { delete slider.dataset.dragging; });
+
+        if (controls) {
+          controls.addEventListener('mousedown', (e) => e.stopPropagation());
+          controls.addEventListener('touchstart', (e) => e.stopPropagation(), { passive: true });
+        }
+        slider.addEventListener('mousedown', (e) => e.stopPropagation());
+        slider.addEventListener('touchstart', (e) => e.stopPropagation(), { passive: true });
+
+        let hideTimer = null;
+        container.addEventListener('mousemove', () => {
+          if (controls) {
+            controls.classList.remove('hidden');
+            clearTimeout(hideTimer);
+            hideTimer = setTimeout(() => {
+              if (!video.paused) controls.classList.add('hidden');
+            }, 2500);
+          }
+        });
+        container.addEventListener('touchstart', () => {
+          if (controls) {
+            controls.classList.remove('hidden');
+            clearTimeout(hideTimer);
+            hideTimer = setTimeout(() => {
+              if (!video.paused) controls.classList.add('hidden');
+            }, 2500);
+          }
+        }, { passive: true });
+
+        video.addEventListener('click', (e) => {
+          const v = viewers[vid];
+          if (v && v.isFullscreen) {
+            e.stopPropagation();
+            if (video.paused) video.play().catch(() => {});
+            else video.pause();
+          }
+        });
+      }
+
+      function formatTime(sec) {
+        if (!sec || isNaN(sec)) return '0:00';
+        const m = Math.floor(sec / 60);
+        const s = Math.floor(sec % 60);
+        return m + ':' + (s < 10 ? '0' : '') + s;
+      }
+
+      // --- 10. Трансформация (pan/zoom) ---
+      function getRelativePoint(v, clientX, clientY) {
+        const rect = v.container.getBoundingClientRect();
+        return { x: clientX - (rect.left + rect.width / 2), y: clientY - (rect.top + rect.height / 2) };
+      }
+
+      function handleWheel(e, vid) {
+        const v = viewers[vid];
+        if (!v || !v.isFullscreen) return;
+        e.preventDefault();
+        const pt = getRelativePoint(v, e.clientX, e.clientY);
+        const oldScale = v.scale;
+        const delta = e.deltaY * -0.005;
+        const newScale = Math.max(0.1, Math.min(4, oldScale + delta));
+        if (newScale === oldScale) return;
+        const ratio = newScale / oldScale;
+        v.panX = pt.x * (1 - ratio) + v.panX * ratio;
+        v.panY = pt.y * (1 - ratio) + v.panY * ratio;
+        v.scale = newScale;
+        updateTransform(vid);
+      }
+
+      function handleMouseDown(e, vid) {
+        const v = viewers[vid];
+        if (!v || !v.isFullscreen) return;
+        v.isDragging = true;
+        v.lastX = e.clientX - v.panX;
+        v.lastY = e.clientY - v.panY;
+        v.container.style.cursor = 'grabbing';
+      }
+
+      function handleMouseUp(vid) {
+        const v = viewers[vid];
+        if (!v) return;
+        v.isDragging = false;
+        if (v.container) v.container.style.cursor = 'grab';
+      }
+
+      function handleMouseMove(e, vid) {
+        const v = viewers[vid];
+        if (!v || !v.isDragging) return;
+        e.preventDefault();
+        v.panX = e.clientX - v.lastX;
+        v.panY = e.clientY - v.lastY;
+        updateTransform(vid);
+      }
+
+      function handleTouchStart(e, vid) {
+        const v = viewers[vid];
+        if (!v || !v.isFullscreen) return;
+        const touches = e.touches;
+        if (touches.length >= 2) {
+          v.initialDistance = Math.hypot(touches[0].clientX - touches[1].clientX, touches[0].clientY - touches[1].clientY);
+          v.initialScale = v.scale;
+          v.initialPanX = v.panX;
+          v.initialPanY = v.panY;
+          v.isDragging = false;
+          const pt = getRelativePoint(v, (touches[0].clientX + touches[1].clientX) / 2, (touches[0].clientY + touches[1].clientY) / 2);
+          v.pinchCenterX = pt.x; v.pinchCenterY = pt.y;
+        } else if (touches.length === 1) {
+          v.lastX = touches[0].clientX - v.panX;
+          v.lastY = touches[0].clientY - v.panY;
+          v.isDragging = true;
+        }
+      }
+
+      function handleTouchMove(e, vid) {
+        const v = viewers[vid];
+        if (!v || !v.isFullscreen) return;
+        e.preventDefault();
+        const touches = e.touches;
+        if (touches.length >= 2) {
+          const currentDistance = Math.hypot(touches[0].clientX - touches[1].clientX, touches[0].clientY - touches[1].clientY);
+          const newScale = Math.max(0.1, Math.min(4, v.initialScale * (currentDistance / v.initialDistance)));
+          const pt = getRelativePoint(v, (touches[0].clientX + touches[1].clientX) / 2, (touches[0].clientY + touches[1].clientY) / 2);
+          const ratio = newScale / v.initialScale;
+          v.panX = pt.x * (1 - ratio) + v.initialPanX * ratio;
+          v.panY = pt.y * (1 - ratio) + v.initialPanY * ratio;
+          v.scale = newScale;
+          updateTransform(vid);
+        } else if (v.isDragging && touches.length === 1) {
+          v.panX = touches[0].clientX - v.lastX;
+          v.panY = touches[0].clientY - v.lastY;
+          updateTransform(vid);
+        }
+      }
+
+      function handleTouchEnd(vid) {
+        const v = viewers[vid];
+        if (v) v.isDragging = false;
+      }
+
+      function updateTransform(vid) {
+        const v = viewers[vid];
+        if (!v) return;
+        const el = v.isVideo ? v.video : v.img;
+        if (!el) return;
+        if (v.isFullscreen) {
+          el.style.transform = 'translate(' + v.panX + 'px, ' + v.panY + 'px) scale(' + v.scale + ')';
+          if (v.isVideo) v.video.classList.add('can-drag'); else el.classList.add('can-drag');
+        } else {
+          el.style.transform = 'translate(0px, 0px) scale(1)';
+          if (v.isVideo) v.video.classList.remove('can-drag'); else el.classList.remove('can-drag');
+        }
+      }
+
+      function toggleFullscreen(vid) {
+        const v = viewers[vid];
+        if (!v) return;
+        const container = v.container;
+        if (!v.isFullscreen) {
+          if (container.requestFullscreen) {
+            container.requestFullscreen().then(() => {
+              v.isFullscreen = true; v.scale = 1; v.panX = 0; v.panY = 0; updateTransform(vid);
+            }).catch(err => console.error(err));
+          } else if (container.webkitRequestFullscreen) {
+            container.webkitRequestFullscreen();
+            v.isFullscreen = true; v.scale = 1; v.panX = 0; v.panY = 0; updateTransform(vid);
+          }
+        } else {
+          if (document.exitFullscreen) {
+            document.exitFullscreen().then(() => {
+              v.isFullscreen = false; v.scale = 1; v.panX = 0; v.panY = 0; updateTransform(vid);
+            });
+          } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+            v.isFullscreen = false; v.scale = 1; v.panX = 0; v.panY = 0; updateTransform(vid);
+          }
+        }
+      }
+
+      document.addEventListener('fullscreenchange', () => {
+        const fsEl = document.fullscreenElement;
+        Object.keys(viewers).forEach(vid => {
+          const v = viewers[vid];
+          if (!fsEl || !v.container.contains(fsEl)) {
+            v.isFullscreen = false; v.scale = 1; v.panX = 0; v.panY = 0;
+          }
+          updateTransform(vid);
+        });
+      });
+      document.addEventListener('webkitfullscreenchange', () => {
+        const fsEl = document.webkitFullscreenElement;
+        Object.keys(viewers).forEach(vid => {
+          const v = viewers[vid];
+          if (!fsEl || !v.container.contains(fsEl)) {
+            v.isFullscreen = false; v.scale = 1; v.panX = 0; v.panY = 0;
+          }
+          updateTransform(vid);
+        });
+      });
+
+      // --- 12. ЗАПУСК ИНТРО ---
+      window.addEventListener('load', () => {
+        const introLoad = document.getElementById('intro');
+        if (introLoad) setTimeout(() => { introLoad.style.opacity = '1'; }, 50);
+      });
+
+      // --- 13. АДАПТИВНОСТЬ ---
+      function onResize() {
+        Object.keys(viewers).forEach(vid => {
+          const v = viewers[vid];
+          if (v) { v.scale = 1; v.panX = 0; v.panY = 0; updateTransform(vid); }
+        });
+      }
+      window.addEventListener('resize', onResize);
+      window.addEventListener('orientationchange', () => { setTimeout(onResize, 300); });
+
+      // --- 14. ПРОВЕРКА НАЛИЧИЯ ИЗОБРАЖЕНИЙ ---
+      window.addEventListener('error', (e) => {
+        if (e.target && e.target.tagName === 'IMG') {
+          console.warn('Картинка не загружена:', e.target.src);
+        }
+      }, true);
+
+      // --- 15. ЗАКРЫТИЕ МОДАЛЬНЫХ ОКОН ПО ESC ---
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          const dlOverlay = document.getElementById('dlDialogOverlay');
+          if (dlOverlay && dlOverlay.style.display === 'flex') {
+            closeDlDialog();
+            return;
+          }
+          const memberOverlay = document.getElementById('memberModalOverlay');
+          if (memberOverlay) memberOverlay.remove();
+        }
+        if (e.key === ' ' || e.code === 'Space') {
+          const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+          if (fsEl) {
+            const video = fsEl.querySelector('video');
+            if (video) {
+              e.preventDefault();
+              if (video.paused) video.play().catch(() => {});
+              else video.pause();
+            }
+          }
+        }
+      });
+
+      // Клик по фону диалога скачивания — закрытие
+      document.getElementById('dlDialogOverlay').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) closeDlDialog();
+      });
+    </script>
+  </body>
+</html>
