@@ -188,7 +188,10 @@
         overscroll-behavior: contain;
       }
 
-      /* АККОРДЕОН ВЕРСИИ — плавное раскрытие через grid-template-rows */
+      /* АККОРДЕОН — анимация высоты в пикселях (считает JS).
+         Это самый совместимый и предсказуемый способ: переход идёт
+         между реальными числами, работает одинаково во всех движках,
+         включая старые WebView. */
       .version-plate {
         background: rgba(255,255,255,0.04); border-bottom: 1px solid var(--border); color: #fff;
         padding: 1rem 1.4rem; display: flex; justify-content: space-between;
@@ -205,37 +208,25 @@
       }
       .parent-plate:hover { background: rgba(255, 82, 82, 0.14); }
 
+      /* Сворачиваемый контейнер: высотой управляет JS.
+         Никаких padding/border на нём — иначе не сожмётся в ноль. */
       .expanded-content {
-        display: grid;
-        grid-template-rows: 0fr;
-        background: rgba(19, 19, 24, 0.4);
-        transition: grid-template-rows 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-      .expanded-content.active { grid-template-rows: 1fr; }
-
-      /* Грид-элемент полностью «голый»: без padding и border,
-         иначе он не может сжаться до нуля и торчит полоска */
-      .expanded-content > .content-inner {
+        height: 0;
         overflow: hidden;
-        min-height: 0;
-        padding: 0;
-        border: none;
-        margin: 0;
+        background: rgba(19, 19, 24, 0.4);
+        transition: height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
-      /* Вся визуальная «начинка» (отступы, красная линия) — во внутреннем блоке,
-         который сам сжимается вместе с грид-элементом */
-      .content-pad { padding: 1.4rem; }
-      .parent-content {
-        background: transparent;
-      }
-      .parent-content .content-pad {
+      /* Вся визуальная «начинка» (отступы, красная линия) — на внутреннем
+         блоке, который обрезается вместе с контейнером */
+      .content-inner { padding: 1.4rem; }
+      .parent-content .content-inner {
         padding: 0.6rem 0.5rem 0.6rem 16px;
         border-left: 2px solid rgba(255, 82, 82, 0.25);
         margin-left: 6px;
       }
 
-      /* АККОРДЕОН В МОДАЛКЕ УЧАСТНИКА */
+      /* АККОРДЕОН В МОДАЛКЕ УЧАСТНИКА — та же механика */
       .member-plate {
         background: rgba(255, 82, 82, 0.08); color: #fff;
         padding: 0.8rem 1rem; display: flex; justify-content: space-between;
@@ -247,20 +238,12 @@
       .member-plate .version-arrow { transition: transform 0.3s ease; }
       .member-plate.expanded .version-arrow { transform: rotate(180deg); }
       .member-acc-content {
-        display: grid;
-        grid-template-rows: 0fr;
+        height: 0;
+        overflow: hidden;
         background: rgba(19, 19, 24, 0.4);
-        transition: grid-template-rows 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
         border-left: 2px solid rgba(255, 82, 82, 0.25);
         margin-left: 6px;
-      }
-      .member-acc-content.active { grid-template-rows: 1fr; }
-      /* Грид-элемент без padding — сжимается до нуля без «хвостика» */
-      .member-acc-content > .member-acc-item {
-        overflow: hidden;
-        min-height: 0;
-        padding: 0;
-        margin: 0;
       }
       .member-acc-inner {
         padding: 0.8rem 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-content: flex-start;
@@ -447,8 +430,8 @@
         .modal-header { padding: 1rem 1rem; }
         .modal-title { font-size: 1rem; }
         .version-plate { padding: 0.9rem 1rem; font-size: 0.82rem; }
-        .content-pad { padding: 1rem; }
-        .parent-content .content-pad { padding-left: 10px; margin-left: 4px; }
+        .content-inner { padding: 1rem; }
+        .parent-content .content-inner { padding-left: 10px; margin-left: 4px; }
         .card-header-row { padding: 1rem 1.2rem; }
         .fs-btn { width: 36px; height: 36px; bottom: 10px; right: 10px; }
         .fs-icon { width: 20px; height: 20px; }
@@ -892,18 +875,15 @@
       let dlPending = null; // { src, ext }
 
       // --- 0b. Оборачиваем содержимое аккордеонов (один раз) ---
-      // Грид-элемент (.content-inner) обязан быть без padding и border,
-      // иначе он не сожмётся до нуля и снизу будет торчать полоска.
-      // Все отступы и красная линия живут в дочернем .content-pad,
-      // который сжимается вместе с грид-элементом.
+      // Сворачиваемый контейнер не имеет своих отступов — иначе он
+      // не сожмётся в ноль и снизу будет торчать полоска.
+      // Все отступы и красная линия живут внутри .content-inner,
+      // который обрезается вместе с контейнером.
       document.querySelectorAll('.expanded-content').forEach(content => {
         if (content.querySelector(':scope > .content-inner')) return;
         const inner = document.createElement('div');
         inner.className = 'content-inner';
-        const pad = document.createElement('div');
-        pad.className = 'content-pad';
-        while (content.firstChild) pad.appendChild(content.firstChild);
-        inner.appendChild(pad);
+        while (content.firstChild) inner.appendChild(content.firstChild);
         content.appendChild(inner);
       });
 
@@ -914,6 +894,84 @@
           introEl.style.display = 'none';
           introEl.style.pointerEvents = 'none';
         });
+      }
+
+      // ============================================================
+      //  ПЛАВНЫЙ АККОРДЕОН: анимация height в пикселях
+      //  Работает одинаково во всех движках, в отличие от
+      //  grid-template-rows (зависит от версии) и max-height
+      //  (анимирует «в воздух» — разная скорость на разных этапах).
+      //  Прерывание в любой момент разворачивается плавно, без скачков.
+      // ============================================================
+      const ACC_DURATION = 450; // должна совпадать с transition в CSS
+
+      // Снимаем «висящий» обработчик завершения прошлой анимации,
+      // чтобы он не сработал позже и не испортил состояние
+      function clearAccHandlers(content) {
+        if (content._accEnd) {
+          content.removeEventListener('transitionend', content._accEnd);
+          content._accEnd = null;
+        }
+        if (content._accTimer) {
+          clearTimeout(content._accTimer);
+          content._accTimer = null;
+        }
+      }
+
+      function expandAcc(content) {
+        clearAccHandlers(content);
+        // Текущая высота может быть промежуточной (анимацию прервали) —
+        // переход пойдёт с текущего кадра, без скачка
+        content.style.height = content.scrollHeight + 'px';
+        const onEnd = (e) => {
+          if (e.target !== content || e.propertyName !== 'height') return;
+          clearAccHandlers(content);
+          // Отдаём высоту обратно потоку: контент adapтируется к
+          // ресайзу окна и поздно загрузившимся картинкам
+          content.style.height = 'auto';
+        };
+        content._accEnd = onEnd;
+        content.addEventListener('transitionend', onEnd);
+        // Страховка: если transitionend не пришёл (скрытая модалка и т.п.)
+        content._accTimer = setTimeout(() => {
+          if (content._accEnd) {
+            clearAccHandlers(content);
+            content.style.height = 'auto';
+          }
+        }, ACC_DURATION + 80);
+      }
+
+      function collapseAcc(content) {
+        clearAccHandlers(content);
+        // Пиним ТЕКУЩУЮ высоту (а не полную scrollHeight — иначе при
+        // прерванной анимации был бы скачок вверх перед закрытием)
+        const current = content.getBoundingClientRect().height;
+        if (current < 1) {
+          content.style.height = '0px';
+          return;
+        }
+        content.style.height = current + 'px';
+        void content.offsetHeight; // фиксируем стартовое значение
+        content.style.height = '0px';
+      }
+
+      function toggleAcc(plate, content) {
+        if (!plate.classList.contains('expanded')) {
+          plate.classList.add('expanded');
+          expandAcc(content);
+        } else {
+          plate.classList.remove('expanded');
+          collapseAcc(content);
+        }
+      }
+
+      // Мгновенно (без анимации) привести аккордеон к нулевой высоте
+      function collapseAccInstant(content) {
+        clearAccHandlers(content);
+        content.style.transition = 'none';
+        content.style.height = '0px';
+        void content.offsetHeight;
+        content.style.transition = '';
       }
 
       // --- 2. Модальное окно проекта ---
@@ -1008,38 +1066,21 @@
         if (e.target === e.currentTarget) closeProjectModal();
       });
 
-      // --- 3. ЕДИНАЯ ЛОГИКА ПЛАВНОГО АККОРДЕОНА ---
-      // Всё построено на CSS-переходе grid-template-rows: 0fr -> 1fr.
-      // Браузер сам интерполирует реальную высоту контента, поэтому:
-      //  - нет проблем с max-height: none (главная причина рывков);
-      //  - анимацию можно прервать в любой момент — она плавно
-      //    развернётся в обратную сторону без скачков;
-      //  - вложенные аккордеоны едут синхронно с родителем автоматически.
-      function toggleAccordion(plate, content) {
-        const willExpand = !plate.classList.contains('expanded');
-        plate.classList.toggle('expanded', willExpand);
-        content.classList.toggle('active', willExpand);
-      }
-
-      // --- 3a. Сброс всех аккордеонов ---
+      // --- 3. Сброс всех аккордеонов (мгновенно, без анимации) ---
       function resetAccordions() {
         document.querySelectorAll('.version-plate').forEach(plate => {
           plate.classList.remove('expanded');
           const arrow = plate.querySelector('.version-arrow');
           if (arrow) arrow.textContent = '\u25BC';
         });
-        document.querySelectorAll('.expanded-content, .member-acc-content').forEach(content => {
-          content.classList.remove('active');
-        });
+        document.querySelectorAll('.expanded-content, .member-acc-content').forEach(collapseAccInstant);
       }
 
       // --- 4. Родительский аккордеон ---
       function toggleParentAccordion(plate) {
         const content = plate.nextElementSibling;
-        const willExpand = !plate.classList.contains('expanded');
-        plate.classList.toggle('expanded', willExpand);
-        content.classList.toggle('active', willExpand);
-        if (!willExpand) {
+        toggleAcc(plate, content);
+        if (!plate.classList.contains('expanded')) {
           // при сворачивании большого раздела возвращаемся к началу списка
           document.getElementById('modalBody').scrollTop = 0;
         }
@@ -1048,25 +1089,18 @@
       // --- 5. Аккордеон версии (каждая версия независима, другие не скрываются) ---
       function toggleVersionContent(plate) {
         const content = plate.nextElementSibling;
-        toggleAccordion(plate, content);
+        toggleAcc(plate, content);
       }
 
       // --- 5a. Аккордеон в модалке участника ---
       function toggleMemberAccordion(plate) {
         const content = plate.nextElementSibling;
-        toggleAccordion(plate, content);
+        toggleAcc(plate, content);
       }
 
       // --- 6. Сворачивание всех версий ---
       function collapseAllVersions() {
-        document.querySelectorAll('.version-plate').forEach(p => {
-          p.classList.remove('expanded');
-          const a = p.querySelector('.version-arrow');
-          if (a) a.textContent = '\u25BC';
-        });
-        document.querySelectorAll('.expanded-content, .member-acc-content').forEach(c => {
-          c.classList.remove('active');
-        });
+        resetAccordions();
         document.getElementById('modalBody').scrollTop = 0;
       }
 
@@ -1141,13 +1175,11 @@
         plate.appendChild(plateTitle);
         plate.appendChild(plateArrow);
 
+        // Внешний блок (.member-acc-content) — анимируется по высоте,
+        // отступы живут внутри (.member-acc-inner), поэтому контейнер
+        // сжимается ровно в ноль без «торчащих хвостов»
         const accContent = document.createElement('div');
         accContent.className = 'member-acc-content';
-
-        // Грид-элемент без padding: сжимается ровно до нуля,
-        // отступы и теги живут в .member-acc-inner внутри него
-        const accItem = document.createElement('div');
-        accItem.className = 'member-acc-item';
         const accInner = document.createElement('div');
         accInner.className = 'member-acc-inner';
 
@@ -1159,8 +1191,7 @@
           accInner.appendChild(tag);
         });
 
-        accItem.appendChild(accInner);
-        accContent.appendChild(accItem);
+        accContent.appendChild(accInner);
         accordionWrap.appendChild(plate);
         accordionWrap.appendChild(accContent);
         infoSide.appendChild(accordionWrap);
