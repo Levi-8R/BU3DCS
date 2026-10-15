@@ -68,23 +68,49 @@
       }
       h3 { font-size: clamp(1.1rem, 4vw, 1.3rem); }
 
+      /* КАРТОЧКА ПРОЕКТА — кликабельнее */
       .project-card {
         background: var(--panel); border: 1px solid var(--border); margin-bottom: 1.8rem;
         border-radius: 12px; cursor: pointer; display: flex; flex-direction: column;
-        transition: transform 0.3s cubic-bezier(0.17, 0.67, 0.12, 0.99), box-shadow 0.3s ease;
+        user-select: none; -webkit-user-select: none; touch-action: manipulation;
+        transition: transform 0.3s cubic-bezier(0.17, 0.67, 0.12, 0.99),
+                    box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
       }
-      .project-card:hover { transform: translateY(-6px); box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5); }
-      .project-card:active { transform: translateY(-2px); }
+      .project-card:hover {
+        transform: translateY(-6px);
+        border-color: rgba(255, 82, 82, 0.55);
+        background: rgba(255,255,255,0.02);
+        box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 82, 82, 0.12);
+      }
+      .project-card:active { transform: translateY(-2px) scale(0.995); }
+      .project-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
       .card-header-row {
         display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
-        gap: 0.7rem; padding: 1.2rem 1.4rem; border-bottom: 1px solid var(--border);
+        gap: 0.7rem; padding: 1.2rem 1.4rem;
       }
-      .card-title { margin: 0; color: #fff; font-size: clamp(1.1rem, 4vw, 1.45rem); font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+      .card-title {
+        margin: 0; color: #fff; font-size: clamp(1.1rem, 4vw, 1.45rem);
+        font-family: 'JetBrains Mono', monospace; font-weight: 700;
+        transition: color 0.3s ease; pointer-events: none;
+      }
+      .project-card:hover .card-title { color: var(--accent); }
       .card-status {
         font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; padding: 0.35rem 0.7rem;
         border-radius: 6px; color: #fff; background: rgba(255,255,255,0.08);
+        transition: background 0.3s ease, color 0.3s ease; pointer-events: none;
       }
+      .project-card:hover .card-status { background: rgba(255,255,255,0.14); }
       .card-status.status-dev { background: rgba(255, 82, 82, 0.15); color: var(--accent); }
+      .project-card:hover .card-status.status-dev { background: rgba(255, 82, 82, 0.3); color: #fff; }
+      .card-arrow {
+        margin-left: auto; color: var(--muted); font-size: 1.3rem; line-height: 1;
+        opacity: 0.45; transform: translateX(-4px);
+        transition: opacity 0.3s ease, transform 0.3s ease, color 0.3s ease;
+        pointer-events: none;
+      }
+      .project-card:hover .card-arrow {
+        opacity: 1; transform: translateX(0); color: var(--accent);
+      }
 
       /* КАРТОЧКИ УЧАСТНИКОВ — кликабельнее */
       .team-member-card {
@@ -509,10 +535,11 @@
       <!-- ПРОЕКТЫ -->
       <section id="projects">
         <h2>Наши проекты</h2>
-        <article class="project-card" onclick="openProjectModal('Тени города Рэха')">
+        <article class="project-card" tabindex="0" onclick="openProjectModal('Тени города Рэха')" onkeydown="if(event.key==='Enter'){openProjectModal('Тени города Рэха')}">
           <div class="card-header-row">
             <h3 class="card-title">Тени города Рэха</h3>
             <span class="card-status status-dev">В разработке</span>
+            <span class="card-arrow">&#10142;</span>
           </div>
         </article>
       </section>
@@ -825,16 +852,16 @@
       // --- 0. Роли участников ---
       const memberRoles = {
         'Ophiuchus': [
-          '3D-моделлер', '3D-аниматор'
+          '3D-моделлер', 'Тестировщик', '3D-аниматор'
         ],
         'Long Сarbine': [
-          '3D-моделлер', '3D-аниматор'
+          '3D-моделлер', 'Тестировщик', '3D-аниматор'
         ],
         'Dexilon333': [
-           'Unity разработчик'
+          'Unity разработчик', 'Тестировщик'
         ],
-       'Node': [
-           'Программист (Unity + сайт)'
+        'Node': [
+          'Программист (Unity + сайт)', 'Тестировщик'
         ]
       };
 
@@ -1602,4 +1629,4 @@
       });
     </script>
   </body>
-  </html>
+</html>
