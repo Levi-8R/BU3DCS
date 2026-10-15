@@ -86,18 +86,48 @@
       }
       .card-status.status-dev { background: rgba(255, 82, 82, 0.15); color: var(--accent); }
 
+      /* КАРТОЧКИ УЧАСТНИКОВ — кликабельнее */
       .team-member-card {
         display: flex; align-items: center; gap: 12px; cursor: pointer;
-        transition: transform 0.3s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+        padding: 0.65rem 0.9rem; border-radius: 12px;
+        background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+        user-select: none; -webkit-user-select: none; touch-action: manipulation;
+        transition: transform 0.3s cubic-bezier(0.17, 0.67, 0.12, 0.99),
+                    background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
       }
-      .team-member-card:hover { transform: translateY(-4px); }
-      .team-member-card:active { transform: translateY(-1px); }
+      .team-member-card:hover {
+        transform: translateY(-4px);
+        background: rgba(255,255,255,0.06);
+        border-color: rgba(255, 82, 82, 0.5);
+        box-shadow: 0 10px 24px rgba(255, 82, 82, 0.12);
+      }
+      .team-member-card:active { transform: translateY(-1px) scale(0.99); }
+      .team-member-card:focus-visible {
+        outline: 2px solid var(--accent); outline-offset: 2px;
+      }
       .team-img {
         width: 64px; height: 64px; object-fit: cover; border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: transform 0.3s ease, box-shadow 0.3s ease;
-        flex-shrink: 0;
+        border: 1px solid rgba(255,255,255,0.08);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        flex-shrink: 0; pointer-events: none;
       }
-      .team-member-card:hover .team-img { transform: scale(1.1); box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+      .team-member-card:hover .team-img {
+        transform: scale(1.1); border-color: rgba(255, 82, 82, 0.5);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.4), 0 0 14px rgba(255, 82, 82, 0.25);
+      }
+      .team-name {
+        font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; color: #fff;
+        transition: color 0.3s ease; pointer-events: none;
+      }
+      .team-member-card:hover .team-name { color: var(--accent); }
+      .team-arrow {
+        margin-left: auto; color: var(--muted); font-size: 1.2rem; line-height: 1;
+        opacity: 0.45; transform: translateX(-4px); transition: opacity 0.3s ease, transform 0.3s ease, color 0.3s ease;
+        pointer-events: none;
+      }
+      .team-member-card:hover .team-arrow {
+        opacity: 1; transform: translateX(0); color: var(--accent);
+      }
 
       /* МОДАЛЬНОЕ ОКНО */
       .modal-overlay {
@@ -376,6 +406,8 @@
         .dl-btn { width: 36px; height: 36px; bottom: 10px; right: 54px; }
         .dl-icon { width: 20px; height: 20px; }
         .team-img { width: 56px; height: 56px; }
+        .team-member-card { padding: 0.55rem 0.75rem; }
+        .team-name { font-size: 1rem; }
         header { padding: 0.5rem 0.8rem; }
         nav a { font-size: 0.78rem; padding: 0.4rem 0.7rem; }
         main { padding: 0 0.8rem; }
@@ -450,24 +482,27 @@
         <p>Мы небольшая команда, много пробуем. Всё выкладываем здесь, чтобы было видно, как из набросков получается что-то своё.</p>
 
         <h3><strong>В состав команды входят:</strong></h3>
-        <div style="display:flex; flex-direction:column; gap:16px; max-width:320px;">
+        <div style="display:flex; flex-direction:column; gap:12px; max-width:360px;">
           <div class="team-member-card" onclick="openMemberModal('Ophiuchus', 'O.png')">
             <img src="O.png" alt="Ophiuchus" class="team-img">
-            <span style="font-family:'JetBrains Mono',monospace; font-size:1.1rem; color:#fff;">Ophiuchus</span>
+            <span class="team-name">Ophiuchus</span>
+            <span class="team-arrow">&#10142;</span>
           </div>
           <div class="team-member-card" onclick="openMemberModal('Long Сarbine', 'L.jpeg')">
             <img src="L.jpeg" alt="Long Сarbine" class="team-img">
-            <span style="font-family:'JetBrains Mono',monospace; font-size:1.1rem; color:#fff;">Long Сarbine</span>
+            <span class="team-name">Long Сarbine</span>
+            <span class="team-arrow">&#10142;</span>
           </div>
           <div class="team-member-card" onclick="openMemberModal('Dexilon333', 'D.jpg')">
             <img src="D.jpg" alt="Dexilon333" class="team-img">
-            <span style="font-family:'JetBrains Mono',monospace; font-size:1.1rem; color:#fff;">Dexilon333</span>
+            <span class="team-name">Dexilon333</span>
+            <span class="team-arrow">&#10142;</span>
           </div>
           <div class="team-member-card" onclick="openMemberModal('Node', 'N.jpg')">
             <img src="N.jpg" alt="Node" class="team-img">
-            <span style="font-family:'JetBrains Mono',monospace; font-size:1.1rem; color:#fff;">Node</span>
+            <span class="team-name">Node</span>
+            <span class="team-arrow">&#10142;</span>
           </div>
-          
         </div>
       </section>
 
@@ -1096,7 +1131,7 @@
         infoSide.className = 'member-modal-info-side';
         const rolesHeader = document.createElement('div');
         rolesHeader.className = 'member-roles-header';
-        rolesHeader.textContent = 'Чем занимается';
+        rolesHeader.textContent = 'Профессии';
         infoSide.appendChild(rolesHeader);
 
         // Аккордеон «В рамках проекта "Тени города Рэха"»
@@ -1567,4 +1602,4 @@
       });
     </script>
   </body>
-</html>
+  </html>
