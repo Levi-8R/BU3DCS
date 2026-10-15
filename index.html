@@ -165,6 +165,28 @@
         margin-left: 6px;
       }
 
+      /* АККОРДЕОН В МОДАЛКЕ УЧАСТНИКА */
+      .member-plate {
+        background: rgba(255, 82, 82, 0.08); color: #fff;
+        padding: 0.8rem 1rem; display: flex; justify-content: space-between;
+        align-items: center; cursor: pointer; user-select: none;
+        font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 700;
+        transition: background 0.2s;
+      }
+      .member-plate:hover { background: rgba(255, 82, 82, 0.14); }
+      .member-plate .version-arrow { transition: transform 0.3s ease; }
+      .member-plate.expanded .version-arrow { transform: rotate(180deg); }
+      .member-acc-content {
+        max-height: 0; overflow: hidden;
+        background: rgba(19, 19, 24, 0.4);
+        transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+        border-left: 2px solid rgba(255, 82, 82, 0.25);
+        margin-left: 6px;
+      }
+      .member-acc-inner {
+        padding: 0.8rem 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-content: flex-start;
+      }
+
       /* ПРОСМОТРЩИК — общий контейнер */
       .viewer-container {
         width: 100%; height: auto; background: #000; position: relative;
@@ -363,6 +385,8 @@
         .member-modal-img-side { flex: 0 0 auto; max-width: 100%; max-height: 35vh; }
         .member-modal-img-side img { max-height: 35vh; }
         .member-roles-list { padding: 0.4rem 1rem 1rem; }
+        .member-plate { padding: 0.7rem 0.9rem; font-size: 0.75rem; }
+        .member-acc-inner { padding: 0.7rem 0.8rem; }
         .play-btn { width: 34px; height: 34px; }
         .play-btn svg { width: 15px; height: 15px; }
         .video-slider { height: 5px; }
@@ -382,6 +406,7 @@
         .modal-title { font-size: 0.9rem; }
         .member-role-tag { font-size: 0.75rem; padding: 0.35rem 0.65rem; }
         .logo img { height: 3.4rem; }
+        .member-plate { font-size: 0.7rem; padding: 0.65rem 0.8rem; }
       }
 
       .viewer-container:fullscreen,
@@ -475,9 +500,9 @@
           </div>
           <div class="expanded-content parent-content">
 
-            <!-- Версия 19.09.2026 -->
+            <!-- Этап 1 -->
             <div class="version-plate" onclick="toggleVersionContent(this)">
-              <span>Версия 19.09.2026</span>
+              <span>Этап 1</span>
               <span class="version-arrow">&#9660;</span>
             </div>
             <div class="expanded-content">
@@ -493,9 +518,9 @@
               <p class="modal-tools" id="modalAuthorV1"></p>
             </div>
 
-            <!-- Версия 20.09.2026 -->
+            <!-- Этап 2 -->
             <div class="version-plate" onclick="toggleVersionContent(this)">
-              <span>Версия 20.09.2026</span>
+              <span>Этап 2</span>
               <span class="version-arrow">&#9660;</span>
             </div>
             <div class="expanded-content">
@@ -511,9 +536,9 @@
               <p class="modal-tools" id="modalAuthorV2"></p>
             </div>
 
-            <!-- Версия 21.09.2026 (1) -->
+            <!-- Этап 3 -->
             <div class="version-plate" onclick="toggleVersionContent(this)">
-              <span>Версия 21.09.2026 (1)</span>
+              <span>Этап 3</span>
               <span class="version-arrow">&#9660;</span>
             </div>
             <div class="expanded-content">
@@ -529,9 +554,9 @@
               <p class="modal-tools" id="modalAuthorV3"></p>
             </div>
 
-            <!-- Версия 21.09.2026 (2) -->
+            <!-- Этап 4 -->
             <div class="version-plate" onclick="toggleVersionContent(this)">
-              <span>Версия 21.09.2026 (2)</span>
+              <span>Этап 4</span>
               <span class="version-arrow">&#9660;</span>
             </div>
             <div class="expanded-content">
@@ -547,9 +572,9 @@
               <p class="modal-tools" id="modalAuthorV4"></p>
             </div>
 
-            <!-- Версия 21.09.2026 (3) -->
+            <!-- Этап 5 -->
             <div class="version-plate" onclick="toggleVersionContent(this)">
-              <span>Версия 21.09.2026 (3)</span>
+              <span>Этап 5</span>
               <span class="version-arrow">&#9660;</span>
             </div>
             <div class="expanded-content">
@@ -565,9 +590,9 @@
               <p class="modal-tools" id="modalAuthorV5"></p>
             </div>
 
-            <!-- Версия 21.09.2026 (4) -->
+            <!-- Этап 6 -->
             <div class="version-plate" onclick="toggleVersionContent(this)">
-              <span>Версия 21.09.2026 (4)</span>
+              <span>Этап 6</span>
               <span class="version-arrow">&#9660;</span>
             </div>
             <div class="expanded-content">
@@ -583,9 +608,9 @@
               <p class="modal-tools" id="modalAuthorV6"></p>
             </div>
 
-            <!-- Версия 21.09.2026 (5) -->
+            <!-- Этап 7 -->
             <div class="version-plate" onclick="toggleVersionContent(this)">
-              <span>Версия 21.09.2026 (5)</span>
+              <span>Этап 7</span>
               <span class="version-arrow">&#9660;</span>
             </div>
             <div class="expanded-content">
@@ -601,9 +626,9 @@
               <p class="modal-tools" id="modalAuthorV7"></p>
             </div>
 
-            <!-- Версия 22.09.2026 (ВИДЕО) -->
+            <!-- Этап 8 (ВИДЕО) -->
             <div class="version-plate" onclick="toggleVersionContent(this)">
-              <span>Версия 22.09.2026</span>
+              <span>Этап 8</span>
               <span class="version-arrow">&#9660;</span>
             </div>
             <div class="expanded-content">
@@ -630,9 +655,9 @@
               <p class="modal-tools" id="modalAuthorV8"></p>
             </div>
 
-            <!-- Версия 24.09.2026 (ВИДЕО) -->
+            <!-- Этап 9 (ВИДЕО) -->
             <div class="version-plate" onclick="toggleVersionContent(this)">
-              <span>Версия 24.09.2026</span>
+              <span>Этап 9</span>
               <span class="version-arrow">&#9660;</span>
             </div>
             <div class="expanded-content">
@@ -659,9 +684,9 @@
               <p class="modal-tools" id="modalAuthorV9"></p>
             </div>
 
-            <!-- Версия 26.09.2026 (ВИДЕО) -->
+            <!-- Этап 10 (ВИДЕО) -->
             <div class="version-plate" onclick="toggleVersionContent(this)">
-              <span>Версия 26.09.2026</span>
+              <span>Этап 10</span>
               <span class="version-arrow">&#9660;</span>
             </div>
             <div class="expanded-content">
@@ -697,9 +722,9 @@
           </div>
           <div class="expanded-content parent-content">
 
-            <!-- Версия 29.09.2026 (ВИДЕО) -->
+            <!-- Этап 11 (ВИДЕО) -->
             <div class="version-plate" onclick="toggleVersionContent(this)">
-              <span>Версия 29.09.2026</span>
+              <span>Этап 11</span>
               <span class="version-arrow">&#9660;</span>
             </div>
             <div class="expanded-content">
@@ -804,61 +829,61 @@
         const overlay = document.getElementById('projectModalOverlay');
         document.getElementById('modalProjectTitle').textContent = title;
 
-        // --- Версия 19.09.2026 ---
+        // --- Этап 1 ---
         document.getElementById('modalDescV1').textContent =
           'Пока не скажу, что это и не раскрою сюжет, но скажу, что начал делать первую сцену архива (на фото один из этапов).';
         document.getElementById('modalToolsV1').textContent = 'Инструменты: Blender';
         document.getElementById('modalAuthorV1').textContent = '-Ophiuchus';
 
-        // --- Версия 20.09.2026 ---
+        // --- Этап 2 ---
         document.getElementById('modalDescV2').textContent = 'А вот и архивист! (предварительная версия)';
         document.getElementById('modalToolsV2').textContent = 'Инструменты: Blender';
         document.getElementById('modalAuthorV2').textContent = '-Ophiuchus';
 
-        // --- Версия 21.09.2026 (1) ---
+        // --- Этап 3 ---
         document.getElementById('modalDescV3').textContent = 'Ящики теперь ящики, а не коробки.';
         document.getElementById('modalToolsV3').textContent = 'Инструменты: Blender';
         document.getElementById('modalAuthorV3').textContent = '-Ophiuchus';
 
-        // --- Версия 21.09.2026 (2) ---
+        // --- Этап 4 ---
         document.getElementById('modalDescV4').textContent = 'Добавлены лампочки, вместо света из ниоткуда.';
         document.getElementById('modalToolsV4').textContent = 'Инструменты: Blender';
         document.getElementById('modalAuthorV4').textContent = '-Ophiuchus';
 
-        // --- Версия 21.09.2026 (3) ---
+        // --- Этап 5 ---
         document.getElementById('modalDescV5').textContent = 'Добавлен стол с ноутбуком, на котором открыт браузер.';
         document.getElementById('modalToolsV5').textContent = 'Инструменты: Blender';
         document.getElementById('modalAuthorV5').textContent = '-Ophiuchus';
 
-        // --- Версия 21.09.2026 (4) ---
+        // --- Этап 6 ---
         document.getElementById('modalDescV6').textContent = 'В одном из ящиков теперь лежит старинная книга.';
         document.getElementById('modalToolsV6').textContent = 'Инструменты: Blender';
         document.getElementById('modalAuthorV6').textContent = '-Ophiuchus';
 
-        // --- Версия 21.09.2026 (5) ---
+        // --- Этап 7 ---
         document.getElementById('modalDescV7').textContent = 'Теперь в сцене есть персонаж с симуляцией ткани.';
         document.getElementById('modalToolsV7').textContent = 'Инструменты: Blender';
         document.getElementById('modalAuthorV7').textContent = '-Ophiuchus';
 
-        // --- Версия 22.09.2026 (ВИДЕО) ---
+        // --- Этап 8 (ВИДЕО) ---
         document.getElementById('modalDescV8').textContent =
           'Нет, это не итоговая сцена, а проверка модификаторов! 😅';
         document.getElementById('modalToolsV8').textContent = 'Инструменты: Blender';
         document.getElementById('modalAuthorV8').textContent = '-Ophiuchus';
 
-        // --- Версия 24.09.2026 (ВИДЕО) ---
+        // --- Этап 9 (ВИДЕО) ---
         document.getElementById('modalDescV9').textContent =
           'Часть рабочего процесса и предварительный результат.';
         document.getElementById('modalToolsV9').textContent = 'Инструменты: Blender';
         document.getElementById('modalAuthorV9').textContent = '-Ophiuchus';
 
-        // --- Версия 26.09.2026 (ВИДЕО) ---
+        // --- Этап 10 (ВИДЕО) ---
         document.getElementById('modalDescV10').textContent =
           'Пересоздаю персонажа, часть первая.';
         document.getElementById('modalToolsV10').textContent = 'Инструменты: Blender';
         document.getElementById('modalAuthorV10').textContent = '-Ophiuchus';
 
-        // --- Версия 29.09.2026 (ВИДЕО) ---
+        // --- Этап 11 (ВИДЕО) ---
         document.getElementById('modalDescV11').textContent = 'Планировка города.';
         document.getElementById('modalToolsV11').textContent = 'Инструменты: Blender';
         document.getElementById('modalAuthorV11').textContent = '-Ophiuchus';
@@ -978,6 +1003,36 @@
         }
       }
 
+      // --- 5a. Аккордеон в модалке участника ---
+      function toggleMemberAccordion(plate) {
+        const content = plate.nextElementSibling;
+        const isExpanded = plate.classList.contains('expanded');
+
+        if (!isExpanded) {
+          plate.classList.add('expanded');
+          content.style.maxHeight = content.scrollHeight + 'px';
+          const onEnd = (e) => {
+            if (e.target !== content || e.propertyName !== 'max-height') return;
+            content.removeEventListener('transitionend', onEnd);
+            content.style.maxHeight = 'none';
+          };
+          content.addEventListener('transitionend', onEnd);
+        } else {
+          plate.classList.remove('expanded');
+          if (getComputedStyle(content).maxHeight === 'none') {
+            content.style.maxHeight = content.scrollHeight + 'px';
+          }
+          void content.offsetHeight;
+          content.style.maxHeight = '0px';
+          const onEnd = (e) => {
+            if (e.target !== content || e.propertyName !== 'max-height') return;
+            content.removeEventListener('transitionend', onEnd);
+            content.style.maxHeight = null;
+          };
+          content.addEventListener('transitionend', onEnd);
+        }
+      }
+
       // --- 6. Сворачивание всех версий ---
       function collapseAllVersions() {
         document.querySelectorAll('.version-plate').forEach(p => {
@@ -1043,16 +1098,43 @@
         rolesHeader.className = 'member-roles-header';
         rolesHeader.textContent = 'Чем занимается';
         infoSide.appendChild(rolesHeader);
-        const rolesList = document.createElement('div');
-        rolesList.className = 'member-roles-list';
+
+        // Аккордеон «В рамках проекта "Тени города Рэха"»
+        const accordionWrap = document.createElement('div');
+        accordionWrap.style.cssText = `padding: 0.4rem 1.2rem 1.2rem; overflow-y: auto; -webkit-overflow-scrolling: touch; flex: 1; min-height: 0;`;
+
+        const plate = document.createElement('div');
+        plate.className = 'member-plate';
+        plate.addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleMemberAccordion(plate);
+        });
+        const plateTitle = document.createElement('span');
+        plateTitle.textContent = 'В рамках проекта «Тени города Рэха»';
+        const plateArrow = document.createElement('span');
+        plateArrow.className = 'version-arrow';
+        plateArrow.textContent = '\u25BC';
+        plate.appendChild(plateTitle);
+        plate.appendChild(plateArrow);
+
+        const accContent = document.createElement('div');
+        accContent.className = 'member-acc-content';
+        const accInner = document.createElement('div');
+        accInner.className = 'member-acc-inner';
+
         const roles = memberRoles[name] || [];
         roles.forEach(role => {
           const tag = document.createElement('span');
           tag.className = 'member-role-tag';
           tag.textContent = role;
-          rolesList.appendChild(tag);
+          accInner.appendChild(tag);
         });
-        infoSide.appendChild(rolesList);
+
+        accContent.appendChild(accInner);
+        accordionWrap.appendChild(plate);
+        accordionWrap.appendChild(accContent);
+        infoSide.appendChild(accordionWrap);
+
         content.appendChild(imgSide); content.appendChild(infoSide);
         modal.appendChild(content);
         overlay.appendChild(modal);
