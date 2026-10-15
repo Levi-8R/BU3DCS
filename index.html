@@ -188,7 +188,7 @@
         overscroll-behavior: contain;
       }
 
-      /* АККОРДЕОН ВЕРСИИ */
+      /* АККОРДЕОН ВЕРСИИ — плавное раскрытие через grid-template-rows */
       .version-plate {
         background: rgba(255,255,255,0.04); border-bottom: 1px solid var(--border); color: #fff;
         padding: 1rem 1.4rem; display: flex; justify-content: space-between;
@@ -206,16 +206,30 @@
       .parent-plate:hover { background: rgba(255, 82, 82, 0.14); }
 
       .expanded-content {
-        max-height: 0;
-        overflow: hidden;
+        display: grid;
+        grid-template-rows: 0fr;
         background: rgba(19, 19, 24, 0.4);
-        transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: grid-template-rows 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       }
-      .content-inner { padding: 1.4rem; }
+      .expanded-content.active { grid-template-rows: 1fr; }
+
+      /* Грид-элемент полностью «голый»: без padding и border,
+         иначе он не может сжаться до нуля и торчит полоска */
+      .expanded-content > .content-inner {
+        overflow: hidden;
+        min-height: 0;
+        padding: 0;
+        border: none;
+        margin: 0;
+      }
+
+      /* Вся визуальная «начинка» (отступы, красная линия) — во внутреннем блоке,
+         который сам сжимается вместе с грид-элементом */
+      .content-pad { padding: 1.4rem; }
       .parent-content {
         background: transparent;
       }
-      .parent-content .content-inner {
+      .parent-content .content-pad {
         padding: 0.6rem 0.5rem 0.6rem 16px;
         border-left: 2px solid rgba(255, 82, 82, 0.25);
         margin-left: 6px;
@@ -233,11 +247,20 @@
       .member-plate .version-arrow { transition: transform 0.3s ease; }
       .member-plate.expanded .version-arrow { transform: rotate(180deg); }
       .member-acc-content {
-        max-height: 0; overflow: hidden;
+        display: grid;
+        grid-template-rows: 0fr;
         background: rgba(19, 19, 24, 0.4);
-        transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: grid-template-rows 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         border-left: 2px solid rgba(255, 82, 82, 0.25);
         margin-left: 6px;
+      }
+      .member-acc-content.active { grid-template-rows: 1fr; }
+      /* Грид-элемент без padding — сжимается до нуля без «хвостика» */
+      .member-acc-content > .member-acc-item {
+        overflow: hidden;
+        min-height: 0;
+        padding: 0;
+        margin: 0;
       }
       .member-acc-inner {
         padding: 0.8rem 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-content: flex-start;
@@ -424,8 +447,8 @@
         .modal-header { padding: 1rem 1rem; }
         .modal-title { font-size: 1rem; }
         .version-plate { padding: 0.9rem 1rem; font-size: 0.82rem; }
-        .content-inner { padding: 1rem; }
-        .parent-content .content-inner { padding-left: 10px; margin-left: 4px; }
+        .content-pad { padding: 1rem; }
+        .parent-content .content-pad { padding-left: 10px; margin-left: 4px; }
         .card-header-row { padding: 1rem 1.2rem; }
         .fs-btn { width: 36px; height: 36px; bottom: 10px; right: 10px; }
         .fs-icon { width: 20px; height: 20px; }
@@ -869,11 +892,18 @@
       let dlPending = null; // { src, ext }
 
       // --- 0b. Оборачиваем содержимое аккордеонов (один раз) ---
+      // Грид-элемент (.content-inner) обязан быть без padding и border,
+      // иначе он не сожмётся до нуля и снизу будет торчать полоска.
+      // Все отступы и красная линия живут в дочернем .content-pad,
+      // который сжимается вместе с грид-элементом.
       document.querySelectorAll('.expanded-content').forEach(content => {
         if (content.querySelector(':scope > .content-inner')) return;
         const inner = document.createElement('div');
         inner.className = 'content-inner';
-        while (content.firstChild) inner.appendChild(content.firstChild);
+        const pad = document.createElement('div');
+        pad.className = 'content-pad';
+        while (content.firstChild) pad.appendChild(content.firstChild);
+        inner.appendChild(pad);
         content.appendChild(inner);
       });
 
@@ -978,115 +1008,53 @@
         if (e.target === e.currentTarget) closeProjectModal();
       });
 
-      // --- 3. Сброс всех аккордеонов ---
+      // --- 3. ЕДИНАЯ ЛОГИКА ПЛАВНОГО АККОРДЕОНА ---
+      // Всё построено на CSS-переходе grid-template-rows: 0fr -> 1fr.
+      // Браузер сам интерполирует реальную высоту контента, поэтому:
+      //  - нет проблем с max-height: none (главная причина рывков);
+      //  - анимацию можно прервать в любой момент — она плавно
+      //    развернётся в обратную сторону без скачков;
+      //  - вложенные аккордеоны едут синхронно с родителем автоматически.
+      function toggleAccordion(plate, content) {
+        const willExpand = !plate.classList.contains('expanded');
+        plate.classList.toggle('expanded', willExpand);
+        content.classList.toggle('active', willExpand);
+      }
+
+      // --- 3a. Сброс всех аккордеонов ---
       function resetAccordions() {
-        document.querySelectorAll('.expanded-content').forEach(clearContentState);
         document.querySelectorAll('.version-plate').forEach(plate => {
           plate.classList.remove('expanded');
           const arrow = plate.querySelector('.version-arrow');
           if (arrow) arrow.textContent = '\u25BC';
         });
-      }
-
-      // --- 3a/3b. Плавное раскрытие и сворачивание (единая логика) ---
-      // Отменяет «висящую» анимацию, чтобы её завершение не перезаписало состояние позже
-      function cancelPending(content) {
-        if (content._te) {
-          content.removeEventListener('transitionend', content._te);
-          content._te = null;
-        }
-      }
-
-      // Если высота была 'none' — фиксируем её в пикселях,
-      // иначе переход 0 <-> none не анимируется и блок «дёргается»
-      function pinHeight(content) {
-        if (getComputedStyle(content).maxHeight === 'none') {
-          content.style.maxHeight = content.scrollHeight + 'px';
-          void content.offsetHeight; // фиксируем стартовое значение перед переходом
-        }
-      }
-
-      function animateAccordion(content, expand, onDone) {
-        cancelPending(content);
-        pinHeight(content);
-
-        if (expand) {
-          content.classList.add('active');
-          content.style.maxHeight = content.scrollHeight + 'px';
-        } else {
+        document.querySelectorAll('.expanded-content, .member-acc-content').forEach(content => {
           content.classList.remove('active');
-          content.style.maxHeight = '0px';
-        }
-
-        const onEnd = (e) => {
-          if (e.target !== content || e.propertyName !== 'max-height') return;
-          content.removeEventListener('transitionend', onEnd);
-          content._te = null;
-          if (expand) {
-            // Снимаем ограничение только ПОСЛЕ завершения анимации
-            content.style.maxHeight = 'none';
-            // Пересчитываем высоту родительских аккордеонов
-            syncAncestors(content);
-          } else {
-            content.style.maxHeight = null;
-          }
-          if (onDone) onDone();
-        };
-        content._te = onEnd;
-        content.addEventListener('transitionend', onEnd);
-      }
-
-      // Когда вложенный аккордеон раскрылся — обновляем высоту родителей,
-      // чтобы контент не обрезался и в конце не было скачка
-      function syncAncestors(content) {
-        let p = content.parentElement;
-        while (p) {
-          if (p.classList && p.classList.contains('expanded-content')) {
-            if (p.style.maxHeight && p.style.maxHeight !== 'none') {
-              p.style.maxHeight = p.scrollHeight + 'px';
-            }
-          }
-          p = p.parentElement;
-        }
-      }
-
-      // --- 3c. Очистка состояния контента (защита от «залипших» состояний) ---
-      function clearContentState(content) {
-        cancelPending(content);
-        content.classList.remove('active');
-        content.style.maxHeight = null;
+        });
       }
 
       // --- 4. Родительский аккордеон ---
       function toggleParentAccordion(plate) {
         const content = plate.nextElementSibling;
-        const isExpanded = plate.classList.contains('expanded');
-
-        if (!isExpanded) {
-          plate.classList.add('expanded');
-          animateAccordion(content, true);
-        } else {
-          plate.classList.remove('expanded');
-          animateAccordion(content, false, () => {
-            document.getElementById('modalBody').scrollTop = 0;
-          });
+        const willExpand = !plate.classList.contains('expanded');
+        plate.classList.toggle('expanded', willExpand);
+        content.classList.toggle('active', willExpand);
+        if (!willExpand) {
+          // при сворачивании большого раздела возвращаемся к началу списка
+          document.getElementById('modalBody').scrollTop = 0;
         }
       }
 
       // --- 5. Аккордеон версии (каждая версия независима, другие не скрываются) ---
       function toggleVersionContent(plate) {
         const content = plate.nextElementSibling;
-        const isExpanded = plate.classList.contains('expanded');
-        plate.classList.toggle('expanded', !isExpanded);
-        animateAccordion(content, !isExpanded);
+        toggleAccordion(plate, content);
       }
 
       // --- 5a. Аккордеон в модалке участника ---
       function toggleMemberAccordion(plate) {
         const content = plate.nextElementSibling;
-        const isExpanded = plate.classList.contains('expanded');
-        plate.classList.toggle('expanded', !isExpanded);
-        animateAccordion(content, !isExpanded);
+        toggleAccordion(plate, content);
       }
 
       // --- 6. Сворачивание всех версий ---
@@ -1096,8 +1064,8 @@
           const a = p.querySelector('.version-arrow');
           if (a) a.textContent = '\u25BC';
         });
-        document.querySelectorAll('.expanded-content').forEach(c => {
-          clearContentState(c);
+        document.querySelectorAll('.expanded-content, .member-acc-content').forEach(c => {
+          c.classList.remove('active');
         });
         document.getElementById('modalBody').scrollTop = 0;
       }
@@ -1175,6 +1143,11 @@
 
         const accContent = document.createElement('div');
         accContent.className = 'member-acc-content';
+
+        // Грид-элемент без padding: сжимается ровно до нуля,
+        // отступы и теги живут в .member-acc-inner внутри него
+        const accItem = document.createElement('div');
+        accItem.className = 'member-acc-item';
         const accInner = document.createElement('div');
         accInner.className = 'member-acc-inner';
 
@@ -1186,7 +1159,8 @@
           accInner.appendChild(tag);
         });
 
-        accContent.appendChild(accInner);
+        accItem.appendChild(accInner);
+        accContent.appendChild(accItem);
         accordionWrap.appendChild(plate);
         accordionWrap.appendChild(accContent);
         infoSide.appendChild(accordionWrap);
@@ -1623,4 +1597,4 @@
       });
     </script>
   </body>
-                </html>
+  </html>
