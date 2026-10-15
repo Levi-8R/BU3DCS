@@ -980,10 +980,7 @@
 
       // --- 3. Сброс всех аккордеонов ---
       function resetAccordions() {
-        document.querySelectorAll('.expanded-content').forEach(content => {
-          content.classList.remove('active');
-          content.style.maxHeight = null;
-        });
+        document.querySelectorAll('.expanded-content').forEach(clearContentState);
         document.querySelectorAll('.version-plate').forEach(plate => {
           plate.classList.remove('expanded');
           const arrow = plate.querySelector('.version-arrow');
@@ -991,40 +988,71 @@
         });
       }
 
-      // --- 3a. Плавное раскрытие ---
-      function smoothExpand(content, afterExpand) {
-        content.classList.add('active');
-        // высота контента: реальный scrollHeight, а не доля экрана
-        content.style.maxHeight = content.scrollHeight + 'px';
+      // --- 3a/3b. Плавное раскрытие и сворачивание (единая логика) ---
+      // Отменяет «висящую» анимацию, чтобы её завершение не перезаписало состояние позже
+      function cancelPending(content) {
+        if (content._te) {
+          content.removeEventListener('transitionend', content._te);
+          content._te = null;
+        }
+      }
+
+      // Если высота была 'none' — фиксируем её в пикселях,
+      // иначе переход 0 <-> none не анимируется и блок «дёргается»
+      function pinHeight(content) {
+        if (getComputedStyle(content).maxHeight === 'none') {
+          content.style.maxHeight = content.scrollHeight + 'px';
+          void content.offsetHeight; // фиксируем стартовое значение перед переходом
+        }
+      }
+
+      function animateAccordion(content, expand, onDone) {
+        cancelPending(content);
+        pinHeight(content);
+
+        if (expand) {
+          content.classList.add('active');
+          content.style.maxHeight = content.scrollHeight + 'px';
+        } else {
+          content.classList.remove('active');
+          content.style.maxHeight = '0px';
+        }
+
         const onEnd = (e) => {
           if (e.target !== content || e.propertyName !== 'max-height') return;
           content.removeEventListener('transitionend', onEnd);
-          content.style.maxHeight = 'none';
-          if (afterExpand) afterExpand();
+          content._te = null;
+          if (expand) {
+            // Снимаем ограничение только ПОСЛЕ завершения анимации
+            content.style.maxHeight = 'none';
+            // Пересчитываем высоту родительских аккордеонов
+            syncAncestors(content);
+          } else {
+            content.style.maxHeight = null;
+          }
+          if (onDone) onDone();
         };
+        content._te = onEnd;
         content.addEventListener('transitionend', onEnd);
       }
 
-      // --- 3b. Плавное сворачивание ---
-      function smoothCollapse(content, afterCollapse) {
-        // если высота уже 'none' — фиксируем текущую высоту перед анимацией
-        if (getComputedStyle(content).maxHeight === 'none') {
-          content.style.maxHeight = content.scrollHeight + 'px';
+      // Когда вложенный аккордеон раскрылся — обновляем высоту родителей,
+      // чтобы контент не обрезался и в конце не было скачка
+      function syncAncestors(content) {
+        let p = content.parentElement;
+        while (p) {
+          if (p.classList && p.classList.contains('expanded-content')) {
+            if (p.style.maxHeight && p.style.maxHeight !== 'none') {
+              p.style.maxHeight = p.scrollHeight + 'px';
+            }
+          }
+          p = p.parentElement;
         }
-        void content.offsetHeight; // фиксируем стартовую высоту
-        content.style.maxHeight = '0px';
-        const onEnd = (e) => {
-          if (e.target !== content || e.propertyName !== 'max-height') return;
-          content.removeEventListener('transitionend', onEnd);
-          content.classList.remove('active');
-          content.style.maxHeight = null;
-          if (afterCollapse) afterCollapse();
-        };
-        content.addEventListener('transitionend', onEnd);
       }
 
       // --- 3c. Очистка состояния контента (защита от «залипших» состояний) ---
       function clearContentState(content) {
+        cancelPending(content);
         content.classList.remove('active');
         content.style.maxHeight = null;
       }
@@ -1036,12 +1064,10 @@
 
         if (!isExpanded) {
           plate.classList.add('expanded');
-          smoothExpand(content, () => {
-            setTimeout(() => { document.getElementById('modalBody').scrollTop = 0; }, 50);
-          });
+          animateAccordion(content, true);
         } else {
           plate.classList.remove('expanded');
-          smoothCollapse(content, () => {
+          animateAccordion(content, false, () => {
             document.getElementById('modalBody').scrollTop = 0;
           });
         }
@@ -1051,48 +1077,16 @@
       function toggleVersionContent(plate) {
         const content = plate.nextElementSibling;
         const isExpanded = plate.classList.contains('expanded');
-
-        if (!isExpanded) {
-          plate.classList.add('expanded');
-          smoothExpand(content, () => {
-            document.getElementById('modalBody').scrollTop = 0;
-          });
-        } else {
-          plate.classList.remove('expanded');
-          smoothCollapse(content, () => {
-            document.getElementById('modalBody').scrollTop = 0;
-          });
-        }
+        plate.classList.toggle('expanded', !isExpanded);
+        animateAccordion(content, !isExpanded);
       }
 
       // --- 5a. Аккордеон в модалке участника ---
       function toggleMemberAccordion(plate) {
         const content = plate.nextElementSibling;
         const isExpanded = plate.classList.contains('expanded');
-
-        if (!isExpanded) {
-          plate.classList.add('expanded');
-          content.style.maxHeight = content.scrollHeight + 'px';
-          const onEnd = (e) => {
-            if (e.target !== content || e.propertyName !== 'max-height') return;
-            content.removeEventListener('transitionend', onEnd);
-            content.style.maxHeight = 'none';
-          };
-          content.addEventListener('transitionend', onEnd);
-        } else {
-          plate.classList.remove('expanded');
-          if (getComputedStyle(content).maxHeight === 'none') {
-            content.style.maxHeight = content.scrollHeight + 'px';
-          }
-          void content.offsetHeight;
-          content.style.maxHeight = '0px';
-          const onEnd = (e) => {
-            if (e.target !== content || e.propertyName !== 'max-height') return;
-            content.removeEventListener('transitionend', onEnd);
-            content.style.maxHeight = null;
-          };
-          content.addEventListener('transitionend', onEnd);
-        }
+        plate.classList.toggle('expanded', !isExpanded);
+        animateAccordion(content, !isExpanded);
       }
 
       // --- 6. Сворачивание всех версий ---
@@ -1629,4 +1623,4 @@
       });
     </script>
   </body>
-</html>
+                </html>
