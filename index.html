@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BU3DCS</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -249,6 +249,24 @@
         padding: 0.8rem 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-content: flex-start;
       }
 
+      /* КНОПКИ ЛИСТАНИЯ УЧАСТНИКОВ — по бокам модалки */
+      .member-nav-btn {
+        position: fixed; top: 50%; transform: translateY(-50%);
+        width: 56px; height: 80px; z-index: 3100;
+        background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+        border-radius: 12px; color: #fff; cursor: pointer; padding: 0;
+        display: flex; align-items: center; justify-content: center;
+        font-family: 'JetBrains Mono', monospace; font-size: 2rem; font-weight: 700; line-height: 1;
+        transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+      }
+      .member-nav-btn:hover {
+        background: rgba(255, 82, 82, 0.15); border-color: rgba(255, 82, 82, 0.5);
+        color: var(--accent); transform: translateY(-50%) scale(1.05);
+      }
+      .member-nav-btn:active { transform: translateY(-50%) scale(0.96); }
+      .member-nav-prev { left: 14px; }
+      .member-nav-next { right: 14px; }
+
       /* ПРОСМОТРЩИК — общий контейнер */
       .viewer-container {
         width: 100%; height: auto; background: #000; position: relative;
@@ -414,15 +432,6 @@
         padding: 0.8rem 1.2rem 0.4rem; color: var(--muted); font-family: 'JetBrains Mono', monospace;
         font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; flex-shrink: 0;
       }
-      .member-roles-list {
-        flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
-        padding: 0.4rem 1.2rem 1.2rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-content: flex-start;
-      }
-      .member-role-tag {
-        display: inline-block; padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.06);
-        border: 1px solid var(--border); border-radius: 8px; color: var(--text);
-        font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; white-space: nowrap;
-      }
 
       @media (max-width: 600px) {
         .modal-overlay { padding: 0; }
@@ -461,6 +470,9 @@
         .viewer-container.has-video .fs-btn { bottom: 52px; }
         .viewer-container.has-video .dl-btn { bottom: 52px; }
         .dl-dialog { padding: 1.2rem; max-width: 90vw; }
+        .member-nav-btn { width: 38px; height: 60px; font-size: 1.4rem; }
+        .member-nav-prev { left: 6px; }
+        .member-nav-next { right: 6px; }
       }
 
       @media (max-width: 360px) {
@@ -571,8 +583,7 @@
       </div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО УЧАСТНИКА -->
-    <div class="modal-overlay" id="memberModalOverlay"></div>
+    <!-- МОДАЛЬНОЕ ОКНО УЧАСТНИКА (создаётся динамически) -->
 
     <!-- ДИАЛОГ ВВОДА ИМЕНИ ФАЙЛА -->
     <div class="dl-dialog-overlay" id="dlDialogOverlay" style="display:none;">
@@ -601,19 +612,28 @@
     </footer>
 
     <script>
-      // --- 0. Роли участников ---
+      // --- 0. Участники: порядок и аватарки (нужен для листания стрелками) ---
+      const MEMBER_LIST = [
+        { name: 'Ophiuchus',    img: 'O.png' },
+        { name: 'Long Сarbine', img: 'L.jpeg' },
+        { name: 'Dexilon333',   img: 'D.jpg' },
+        { name: 'Node',         img: 'N.jpg' }
+      ];
+
+      // --- 0. Роли участников по проектам ---
       const memberRoles = {
         'Ophiuchus': [
-          '3D-моделлер', '3D-аниматор', 'Тестировщик'
+          { project: 'Тени города Рэха', roles: ['3D-моделлер', '3D-аниматор', 'Тестировщик'] },
+          { project: 'Ворон и миры', roles: ['3D-моделлер', '3D-аниматор', 'Звукорежиссёр'] }
         ],
         'Long Сarbine': [
-          '3D-моделлер', '3D-аниматор', 'Тестировщик'
+          { project: 'Тени города Рэха', roles: ['3D-моделлер', '3D-аниматор','Звукорежиссёр', 'Тестировщик'] }
         ],
         'Dexilon333': [
-          'Unity разработчик', 'Тестировщик'
+          { project: 'Тени города Рэха', roles: ['Unity разработчик', 'Тестировщик'] }
         ],
         'Node': [
-          'Программист (Unity + сайт)'
+          { project: 'Тени города Рэха', roles: ['Программист (Unity)'] }
         ]
       };
 
@@ -919,13 +939,33 @@
         document.getElementById('modalBody').scrollTop = 0;
       }
 
-      // --- 7. Модальное окно участника ---
+      // --- 7. Модальное окно участника (со стрелками листания) ---
+
+      // Индекс участника в MEMBER_LIST (для переходов назад/вперёд)
+      function memberIndex(name) {
+        return MEMBER_LIST.findIndex(m => m.name === name);
+      }
+
+      // Переход к предыдущему/следующему участнику (по кругу)
+      function navigateMember(dir) {
+        const overlay = document.getElementById('memberModalOverlay');
+        if (!overlay) return;
+        const current = memberIndex(overlay.dataset.memberName);
+        if (current === -1) return;
+        const next = (current + dir + MEMBER_LIST.length) % MEMBER_LIST.length;
+        const m = MEMBER_LIST[next];
+        overlay.remove();
+        openMemberModal(m.name, m.img);
+      }
+
       function openMemberModal(name, imgSrc) {
+        // Если открыта другая модалка участника — заменяем её
         const existing = document.getElementById('memberModalOverlay');
         if (existing) existing.remove();
 
         const overlay = document.createElement('div');
         overlay.id = 'memberModalOverlay';
+        overlay.dataset.memberName = name;
         overlay.style.cssText = `
           position:fixed; top:0; left:0; right:0; bottom:0;
           background:rgba(0,0,0,0.92); z-index:3000;
@@ -934,7 +974,36 @@
         `;
         overlay.classList.add('modal-overlay');
         overlay.style.display = 'flex';
-        overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+
+        // Клик по фону: слева от модалки — предыдущий участник,
+        // справа — следующий, сверху/снизу — закрыть
+        overlay.addEventListener('click', (e) => {
+          if (e.target !== overlay) return;
+          const rect = modal.getBoundingClientRect();
+          if (e.clientX < rect.left) { navigateMember(-1); return; }
+          if (e.clientX > rect.right) { navigateMember(1); return; }
+          overlay.remove();
+        });
+
+        // Стрелка «предыдущий» слева
+        const navPrev = document.createElement('button');
+        navPrev.className = 'member-nav-btn member-nav-prev';
+        navPrev.title = 'Предыдущий участник';
+        navPrev.textContent = '\u2039';
+        navPrev.addEventListener('click', (e) => {
+          e.stopPropagation();
+          navigateMember(-1);
+        });
+
+        // Стрелка «следующий» справа
+        const navNext = document.createElement('button');
+        navNext.className = 'member-nav-btn member-nav-next';
+        navNext.title = 'Следующий участник';
+        navNext.textContent = '\u203A';
+        navNext.addEventListener('click', (e) => {
+          e.stopPropagation();
+          navigateMember(1);
+        });
 
         const modal = document.createElement('div');
         modal.style.cssText = `
@@ -944,6 +1013,7 @@
           max-width:90vw; max-height:90vh;
           display:flex; flex-direction:column;
           width:100%; max-width:700px;
+          animation:popIn 0.3s cubic-bezier(0.2,0,0.3,1);
         `;
 
         const header = document.createElement('div');
@@ -972,48 +1042,53 @@
         rolesHeader.textContent = 'Профессии';
         infoSide.appendChild(rolesHeader);
 
-        // Аккордеон «В рамках проекта "Тени города Рэха"»
+        // Аккордеоны по проектам
         const accordionWrap = document.createElement('div');
         accordionWrap.style.cssText = `padding: 0.4rem 1.2rem 1.2rem; overflow-y: auto; -webkit-overflow-scrolling: touch; flex: 1; min-height: 0;`;
 
-        const plate = document.createElement('div');
-        plate.className = 'member-plate';
-        plate.addEventListener('click', (e) => {
-          e.stopPropagation();
-          toggleMemberAccordion(plate);
+        const memberProjects = memberRoles[name] || [];
+        memberProjects.forEach(({ project, roles }) => {
+          const plate = document.createElement('div');
+          plate.className = 'member-plate';
+          plate.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMemberAccordion(plate);
+          });
+          const plateTitle = document.createElement('span');
+          plateTitle.textContent = 'В рамках проекта «' + project + '»';
+          const plateArrow = document.createElement('span');
+          plateArrow.className = 'version-arrow';
+          plateArrow.textContent = '\u25BC';
+          plate.appendChild(plateTitle);
+          plate.appendChild(plateArrow);
+
+          // Внешний блок (.member-acc-content) — анимируется по высоте,
+          // отступы живут внутри (.member-acc-inner), поэтому контейнер
+          // сжимается ровно в ноль без «торчащих хвостов»
+          const accContent = document.createElement('div');
+          accContent.className = 'member-acc-content';
+          const accInner = document.createElement('div');
+          accInner.className = 'member-acc-inner';
+
+          (roles || []).forEach(role => {
+            const tag = document.createElement('span');
+            tag.className = 'member-role-tag';
+            tag.textContent = role;
+            accInner.appendChild(tag);
+          });
+
+          accContent.appendChild(accInner);
+          accordionWrap.appendChild(plate);
+          accordionWrap.appendChild(accContent);
         });
-        const plateTitle = document.createElement('span');
-        plateTitle.textContent = 'В рамках проекта «Тени города Рэха»';
-        const plateArrow = document.createElement('span');
-        plateArrow.className = 'version-arrow';
-        plateArrow.textContent = '\u25BC';
-        plate.appendChild(plateTitle);
-        plate.appendChild(plateArrow);
-
-        // Внешний блок (.member-acc-content) — анимируется по высоте,
-        // отступы живут внутри (.member-acc-inner), поэтому контейнер
-        // сжимается ровно в ноль без «торчащих хвостов»
-        const accContent = document.createElement('div');
-        accContent.className = 'member-acc-content';
-        const accInner = document.createElement('div');
-        accInner.className = 'member-acc-inner';
-
-        const roles = memberRoles[name] || [];
-        roles.forEach(role => {
-          const tag = document.createElement('span');
-          tag.className = 'member-role-tag';
-          tag.textContent = role;
-          accInner.appendChild(tag);
-        });
-
-        accContent.appendChild(accInner);
-        accordionWrap.appendChild(plate);
-        accordionWrap.appendChild(accContent);
         infoSide.appendChild(accordionWrap);
 
         content.appendChild(imgSide); content.appendChild(infoSide);
         modal.appendChild(content);
+
         overlay.appendChild(modal);
+        overlay.appendChild(navPrev);
+        overlay.appendChild(navNext);
         document.body.appendChild(overlay);
       }
 
@@ -1412,7 +1487,7 @@
         }
       }, true);
 
-      // --- 15. ЗАКРЫТИЕ МОДАЛЬНЫХ ОКОН ПО ESC ---
+      // --- 15. ЗАКРЫТИЕ МОДАЛЬНЫХ ОКОН ПО ESC + ЛИСТАНИЕ СТРЕЛКАМИ ---
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
           const dlOverlay = document.getElementById('dlDialogOverlay');
@@ -1422,6 +1497,14 @@
           }
           const memberOverlay = document.getElementById('memberModalOverlay');
           if (memberOverlay) memberOverlay.remove();
+        }
+        // Стрелки клавиатуры листают участников, если открыта их модалка
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+          const memberOverlay = document.getElementById('memberModalOverlay');
+          if (memberOverlay) {
+            e.preventDefault();
+            navigateMember(e.key === 'ArrowLeft' ? -1 : 1);
+          }
         }
         if (e.key === ' ' || e.code === 'Space') {
           const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
