@@ -68,7 +68,7 @@
       }
       h3 { font-size: clamp(1.1rem, 4vw, 1.3rem); }
 
-      /* КАРТОЧКА ПРОЕКТА — кликабельнее */
+      /* КАРТОЧКА ПРОЕКТА */
       .project-card {
         background: var(--panel); border: 1px solid var(--border); margin-bottom: 1.8rem;
         border-radius: 12px; cursor: pointer; display: flex; flex-direction: column;
@@ -112,7 +112,7 @@
         opacity: 1; transform: translateX(0); color: var(--accent);
       }
 
-      /* КАРТОЧКИ УЧАСТНИКОВ — кликабельнее */
+      /* КАРТОЧКИ УЧАСТНИКОВ */
       .team-member-card {
         display: flex; align-items: center; gap: 12px; cursor: pointer;
         padding: 0.65rem 0.9rem; border-radius: 12px;
@@ -188,10 +188,7 @@
         overscroll-behavior: contain;
       }
 
-      /* АККОРДЕОН — анимация высоты в пикселях (считает JS).
-         Это самый совместимый и предсказуемый способ: переход идёт
-         между реальными числами, работает одинаково во всех движках,
-         включая старые WebView. */
+      /* АККОРДЕОН */
       .version-plate {
         background: rgba(255,255,255,0.04); border-bottom: 1px solid var(--border); color: #fff;
         padding: 1rem 1.4rem; display: flex; justify-content: space-between;
@@ -208,8 +205,6 @@
       }
       .parent-plate:hover { background: rgba(255, 82, 82, 0.14); }
 
-      /* Сворачиваемый контейнер: высотой управляет JS.
-         Никаких padding/border на нём — иначе не сожмётся в ноль. */
       .expanded-content {
         height: 0;
         overflow: hidden;
@@ -217,8 +212,6 @@
         transition: height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
-      /* Вся визуальная «начинка» (отступы, красная линия) — на внутреннем
-         блоке, который обрезается вместе с контейнером */
       .content-inner { padding: 1.4rem; }
       .parent-content .content-inner {
         padding: 0.6rem 0.5rem 0.6rem 16px;
@@ -226,7 +219,7 @@
         margin-left: 6px;
       }
 
-      /* АККОРДЕОН В МОДАЛКЕ УЧАСТНИКА — та же механика */
+      /* АККОРДЕОН В МОДАЛКЕ УЧАСТНИКА */
       .member-plate {
         background: rgba(255, 82, 82, 0.08); color: #fff;
         padding: 0.8rem 1rem; display: flex; justify-content: space-between;
@@ -249,7 +242,22 @@
         padding: 0.8rem 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-content: flex-start;
       }
 
-      /* КНОПКИ ЛИСТАНИЯ УЧАСТНИКОВ — по бокам модалки */
+      /* ТЕГ РОЛИ (базовое правило было пропущено) */
+      .member-role-tag {
+        display: inline-block;
+        padding: 0.45rem 0.85rem;
+        background: rgba(255, 82, 82, 0.12);
+        border: 1px solid rgba(255, 82, 82, 0.32);
+        color: var(--accent);
+        border-radius: 999px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.82rem;
+        font-weight: 700;
+        line-height: 1.3;
+        white-space: nowrap;
+      }
+
+      /* КНОПКИ ЛИСТАНИЯ УЧАСТНИКОВ */
       .member-nav-btn {
         position: fixed; top: 50%; transform: translateY(-50%);
         width: 56px; height: 80px; z-index: 3100;
@@ -267,7 +275,7 @@
       .member-nav-prev { left: 14px; }
       .member-nav-next { right: 14px; }
 
-      /* ПРОСМОТРЩИК — общий контейнер */
+      /* ПРОСМОТРЩИК */
       .viewer-container {
         width: 100%; height: auto; background: #000; position: relative;
         overflow: hidden; border-radius: 8px; margin: 1rem 0;
@@ -287,7 +295,6 @@
       .viewer-image.can-drag { cursor: grab; }
       .viewer-image.can-drag:active { cursor: grabbing; }
 
-      /* ВИДЕО-ПРОСМОТРЩИК */
       .viewer-video {
         width: 100%; height: auto; display: block; object-fit: contain;
         background: #000; transform-origin: center center;
@@ -346,10 +353,11 @@
         border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;
         display: flex; align-items: center; justify-content: center;
         cursor: pointer; padding: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        color: #fff; /* нужно для stroke="currentColor" */
         transition: background 0.2s, border-color 0.2s;
       }
       .fs-btn:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.4); }
-      .fs-icon { width: 24px; height: 24px; object-fit: contain; display: block; }
+      .fs-icon { width: 24px; height: 24px; display: block; }
 
       .dl-btn {
         position: absolute; bottom: 12px; right: 60px; z-index: 10;
@@ -357,10 +365,11 @@
         border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;
         display: flex; align-items: center; justify-content: center;
         cursor: pointer; padding: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        color: #fff; /* нужно для stroke="currentColor" */
         transition: background 0.2s, border-color 0.2s;
       }
       .dl-btn:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.4); }
-      .dl-icon { width: 24px; height: 24px; object-fit: contain; display: block; border-radius: 4px; }
+      .dl-icon { width: 24px; height: 24px; display: block; }
 
       .viewer-container.has-video .fs-btn { bottom: 58px; }
       .viewer-container.has-video .dl-btn { bottom: 58px; }
@@ -457,7 +466,6 @@
         .member-modal-content { flex-direction: column; }
         .member-modal-img-side { flex: 0 0 auto; max-width: 100%; max-height: 35vh; }
         .member-modal-img-side img { max-height: 35vh; }
-        .member-roles-list { padding: 0.4rem 1rem 1rem; }
         .member-plate { padding: 0.7rem 0.9rem; font-size: 0.75rem; }
         .member-acc-inner { padding: 0.7rem 0.8rem; }
         .play-btn { width: 34px; height: 34px; }
@@ -578,12 +586,9 @@
           <h3 class="modal-title" id="modalProjectTitle">Название проекта</h3>
           <button class="close-modal" onclick="closeProjectModal()">&times;</button>
         </div>
-        <!-- Содержимое модалки строится из данных в JS -->
         <div class="modal-body" id="modalBody"></div>
       </div>
     </div>
-
-    <!-- МОДАЛЬНОЕ ОКНО УЧАСТНИКА (создаётся динамически) -->
 
     <!-- ДИАЛОГ ВВОДА ИМЕНИ ФАЙЛА -->
     <div class="dl-dialog-overlay" id="dlDialogOverlay" style="display:none;">
@@ -612,7 +617,22 @@
     </footer>
 
     <script>
-      // --- 0. Участники: порядок и аватарки (нужен для листания стрелками) ---
+      // ============================================================
+      //  0. КОНСТАНТЫ И ГЛОБАЛЬНОЕ СОСТОЯНИЕ
+      // ============================================================
+      const PLAY_ICON  = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+      const PAUSE_ICON = '<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+
+      // Счётчик уникальных id зрителей (был забыт — из-за этого падало всё)
+      let viewerIdCounter = 0;
+
+      // Активный зритель, который сейчас тащат (единый глобальный обработчик ниже)
+      let activeDragVid = null;
+      let globalPointerListenersAttached = false;
+
+      // ============================================================
+      //  1. УЧАСТНИКИ
+      // ============================================================
       const MEMBER_LIST = [
         { name: 'Ophiuchus',    img: 'O.png' },
         { name: 'Long Сarbine', img: 'L.jpeg' },
@@ -620,7 +640,6 @@
         { name: 'Node',         img: 'N.jpg' }
       ];
 
-      // --- 0. Роли участников по проектам ---
       const memberRoles = {
         'Ophiuchus': [
           { project: 'Тени города Рэха', roles: ['3D-моделлер', '3D-аниматор', 'Тестировщик'] },
@@ -637,8 +656,9 @@
         ]
       };
 
-      // --- 0a. Данные проектов ---
-      // type: 'img' — картинка, 'video' — видео
+      // ============================================================
+      //  2. ДАННЫЕ ПРОЕКТОВ
+      // ============================================================
       const projectData = {
         'Тени города Рэха': {
           sections: [
@@ -662,9 +682,9 @@
                 { type: 'video', src: 'тгр са э8.mp4',
                   desc: 'Нет, это не итоговая сцена, а проверка модификаторов! 😅' },
                 { type: 'video', src: 'тгр са э9.mp4',
-                  desc: 'Часть рабочего процесса и предварительный результат.' },
-                { type: 'video', src: 'тгр са э10.mp4',
-                  desc: 'Пересоздаю персонажа, часть первая.' }
+                  desc: 'Часть рабочего процесса и предварительный результат.' }//,
+                //{ type: 'video', src: 'тгр са э10.mp4',
+                 // desc: 'Пересоздаю персонажа, часть первая.' }
               ]
             },
             {
@@ -673,16 +693,23 @@
                 { type: 'video', src: 'тгр г э1.mp4',
                   desc: 'Планировка города.' }
               ]
+            },
+            {
+              title: 'Сцена въезда в город',
+              stages: [
+                { type: 'img', src: 'тгр свг э1.png',
+                  desc: 'Первая версия машины.' }
+              ]
             }
           ]
         },
-                'Ворон и миры': {
+        'Ворон и миры': {
           sections: [
             {
-              title: null, // без родительского аккордеона — этапы прямо в модалке
+              title: null,
               stages: [
                 { type: 'img', src: 'вим э1.png', desc: 'Создана модель «Ворона».' },
-                { type: 'img', src: 'вим э2.png', desc: 'Вороне создан скелет.' },
+                { type: 'img', src: 'вим э2.png', desc: 'Ворону создан скелет.' },
                 { type: 'img', src: 'вим э3.png', desc: 'Сделана часть карты.' },
                 { type: 'img', src: 'вим э4.png', desc: 'Начал анимировать.' },
                 { type: 'img', src: 'вим э5.png', desc: 'Сделал вторую часть анимации.' },
@@ -692,35 +719,34 @@
             }
           ]
         }
-
       };
-      // Инструменты и автор общие для всех этапов
+
       const DEFAULT_TOOLS = 'Blender';
-      const DEFAULT_AUTHOR = '-Ophiuchus';
 
-      // --- 0b. Состояние диалога скачивания ---
-      let dlPending = null; // { src, ext }
+      // ============================================================
+      //  3. ДИАЛОГ СКАЧИВАНИЯ
+      // ============================================================
+      let dlPending = null;
 
-      // --- 0c. Интро ---
+      // ============================================================
+      //  4. ИНТРО
+      // ============================================================
       const introEl = document.getElementById('intro');
       if (introEl) {
         introEl.addEventListener('animationend', () => {
           introEl.style.display = 'none';
-          introEl.style.pointerEvents = 'none';
         });
+        // Страховка: если animationend не придёт — скрываем принудительно
+        setTimeout(() => {
+          if (introEl.style.display !== 'none') introEl.style.display = 'none';
+        }, 2500);
       }
 
       // ============================================================
-      //  ПЛАВНЫЙ АККОРДЕОН: анимация height в пикселях
-      //  Работает одинаково во всех движках, в отличие от
-      //  grid-template-rows (зависит от версии) и max-height
-      //  (анимирует «в воздух» — разная скорость на разных этапах).
-      //  Прерывание в любой момент разворачивается плавно, без скачков.
+      //  5. ПЛАВНЫЙ АККОРДЕОН
       // ============================================================
-      const ACC_DURATION = 450; // должна совпадать с transition в CSS
+      const ACC_DURATION = 450;
 
-      // Снимаем «висящий» обработчик завершения прошлой анимации,
-      // чтобы он не сработал позже и не испортил состояние
       function clearAccHandlers(content) {
         if (content._accEnd) {
           content.removeEventListener('transitionend', content._accEnd);
@@ -734,19 +760,14 @@
 
       function expandAcc(content) {
         clearAccHandlers(content);
-        // Текущая высота может быть промежуточной (анимацию прервали) —
-        // переход пойдёт с текущего кадра, без скачка
         content.style.height = content.scrollHeight + 'px';
         const onEnd = (e) => {
           if (e.target !== content || e.propertyName !== 'height') return;
           clearAccHandlers(content);
-          // Отдаём высоту обратно потоку: контент адаптируется к
-          // ресайзу окна и поздно загрузившимся картинкам
           content.style.height = 'auto';
         };
         content._accEnd = onEnd;
         content.addEventListener('transitionend', onEnd);
-        // Страховка: если transitionend не пришёл (скрытая модалка и т.п.)
         content._accTimer = setTimeout(() => {
           if (content._accEnd) {
             clearAccHandlers(content);
@@ -757,30 +778,19 @@
 
       function collapseAcc(content) {
         clearAccHandlers(content);
-        // Пиним ТЕКУЩУЮ высоту (а не полную scrollHeight — иначе при
-        // прерванной анимации был бы скачок вверх перед закрытием)
         const current = content.getBoundingClientRect().height;
         if (current < 1) {
           content.style.height = '0px';
           return;
         }
         content.style.height = current + 'px';
-        void content.offsetHeight; // фиксируем стартовое значение
+        void content.offsetHeight;
         content.style.height = '0px';
       }
 
-      function toggleAcc(plate, content) {
-        if (!plate.classList.contains('expanded')) {
-          plate.classList.add('expanded');
-          expandAcc(content);
-        } else {
-          plate.classList.remove('expanded');
-          collapseAcc(content);
-        }
-      }
-
-      // Мгновенно (без анимации) привести аккордеон к нулевой высоте
+      // Мгновенное сворачивание (без анимации) — для сброса
       function collapseAccInstant(content) {
+        if (!content) return;
         clearAccHandlers(content);
         content.style.transition = 'none';
         content.style.height = '0px';
@@ -788,36 +798,61 @@
         content.style.transition = '';
       }
 
-      // --- 2. Модальное окно проекта (сборка из данных) ---
-      let viewerIdCounter = 0;
-
-      function stageMediaHTML(vid, stage) {
-        const dlBtn = '<button class="dl-btn" title="Скачать" onclick="downloadMedia(\'' + vid + '\', event)"><img src="С.jpeg" alt="Скачать" class="dl-icon"></button>';
-        const fsBtn = '<button class="fs-btn" title="Развернуть на весь экран" onclick="toggleFullscreen(\'' + vid + '\')"><img src="R.png" alt="Развернуть" class="fs-icon"></button>';
-        if (stage.type === 'video') {
-          return '<div class="viewer-container has-video" data-viewer="' + vid + '">' +
-            '<video class="viewer-video" data-viewer-video="' + vid + '" preload="metadata" playsinline>' +
-            '<source src="' + stage.src + '" type="video/mp4">' +
-            '</video>' +
-            '<div class="video-controls" data-controls="' + vid + '">' +
-            '<button class="play-btn" data-play-btn="' + vid + '" title="Воспроизвести / Пауза">' +
-            '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>' +
-            '</button>' +
-            '<div class="video-slider-wrap">' +
-            '<input type="range" class="video-slider" data-slider="' + vid + '" min="0" max="100" value="0" step="0.1">' +
-            '</div>' +
-            '<span class="video-time" data-time="' + vid + '">0:00 / 0:00</span>' +
-            '</div>' +
-            dlBtn + fsBtn +
-            '</div>';
+      // Универсальный тоггл для всех аккордеонов
+      function toggleAcc(plate, content) {
+        if (!content) return;
+        const isExpanded = plate.classList.contains('expanded');
+        if (isExpanded) {
+          plate.classList.remove('expanded');
+          collapseAcc(content);
+        } else {
+          plate.classList.add('expanded');
+          expandAcc(content);
         }
-        return '<div class="viewer-container" data-viewer="' + vid + '">' +
-          '<img src="' + stage.src + '" alt="Скриншот проекта" class="viewer-image" data-viewer-img="' + vid + '">' +
-          dlBtn + fsBtn +
-          '</div>';
       }
 
-      function appendStages(stages, container) {
+      // ============================================================
+      //  6. HTML ДЛЯ МЕДИА-ЭТАПА
+      // ============================================================
+      function stageMediaHTML(vid, stage) {
+        const isVideo = stage.type === 'video';
+        let html = '<div class="viewer-container' + (isVideo ? ' has-video' : '') + '" data-viewer="' + vid + '">';
+
+        if (isVideo) {
+          html += '<video class="viewer-video" preload="metadata" playsinline>';
+          html += '<source src="' + stage.src + '" type="video/mp4">';
+          html += '</video>';
+          html += '<div class="video-controls" data-controls="' + vid + '">';
+          html +=   '<button class="play-btn" type="button" data-play-btn="' + vid + '" aria-label="Воспроизвести">' + PLAY_ICON + '</button>';
+          html +=   '<div class="video-slider-wrap">';
+          html +=     '<input type="range" class="video-slider" min="0" max="100" step="0.1" value="0" data-slider="' + vid + '" aria-label="Прогресс">';
+          html +=     '<span class="video-time" data-time="' + vid + '">0:00 / 0:00</span>';
+          html +=   '</div>';
+          html += '</div>';
+        } else {
+          html += '<img class="viewer-image" src="' + stage.src + '" alt="Этап" draggable="false">';
+        }
+
+        html += '<button class="fs-btn" type="button" title="На весь экран" aria-label="На весь экран">';
+        html +=   '<svg class="fs-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
+        html +=     '<path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M16 3h3a2 2 0 0 1 2 2v3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/><path d="M8 21H5a2 2 0 0 1-2-2v-3"/>';
+        html +=   '</svg>';
+        html += '</button>';
+
+        html += '<button class="dl-btn" type="button" title="Скачать" aria-label="Скачать">';
+        html +=   '<svg class="dl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
+        html +=     '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>';
+        html +=   '</svg>';
+        html += '</button>';
+
+        html += '</div>';
+        return html;
+      }
+
+      // ============================================================
+      //  7. СБОРКА ЭТАПОВ
+      // ============================================================
+      function appendStages(stages, container, parentTitle) {
         let stageNum = 1;
         stages.forEach(stage => {
           const vid = 'st' + (viewerIdCounter++);
@@ -842,62 +877,58 @@
           container.appendChild(plate);
           container.appendChild(content);
 
-          // Тексты этапа
           document.getElementById('modalDesc' + vid).textContent = stage.desc;
           document.getElementById('modalTools' + vid).textContent = 'Инструменты: ' + DEFAULT_TOOLS;
-          document.getElementById('modalAuthor' + vid).textContent = DEFAULT_AUTHOR;
 
-          // Инициализация просмотрщика
+          const author = (parentTitle === 'Сцена въезда в город') ? 'Long Сarbine' : '-Ophiuchus';
+          document.getElementById('modalAuthor' + vid).textContent = author;
+
           initViewer(vid);
         });
       }
 
+      // ============================================================
+      //  8. ОТКРЫТИЕ/ЗАКРЫТИЕ МОДАЛКИ ПРОЕКТА
+      // ============================================================
       function openProjectModal(title) {
+        const data = projectData[title];
+        if (!data) return; // защита от неизвестного проекта
+
         const overlay = document.getElementById('projectModalOverlay');
         document.getElementById('modalProjectTitle').textContent = title;
 
         const body = document.getElementById('modalBody');
         body.innerHTML = '';
 
-        const data = projectData[title];
-        if (data) {
-          data.sections.forEach(section => {
-            if (section.title) {
-              // Родительский аккордеон
-              const plate = document.createElement('div');
-              plate.className = 'version-plate parent-plate';
-              plate.setAttribute('onclick', 'toggleParentAccordion(this)');
-              plate.innerHTML = '<span>' + section.title + '</span><span class="version-arrow">&#9660;</span>';
+        data.sections.forEach(section => {
+          if (section.title) {
+            const plate = document.createElement('div');
+            plate.className = 'version-plate parent-plate';
+            plate.setAttribute('onclick', 'toggleParentAccordion(this)');
+            plate.innerHTML = '<span>' + section.title + '</span><span class="version-arrow">&#9660;</span>';
 
-              const content = document.createElement('div');
-              content.className = 'expanded-content parent-content';
+            const content = document.createElement('div');
+            content.className = 'expanded-content parent-content';
 
-              body.appendChild(plate);
-              body.appendChild(content);
-              appendStages(section.stages, content);
-            } else {
-              // Этапы напрямую, без родительского раздела
-              appendStages(section.stages, body);
-            }
-          });
-        }
+            body.appendChild(plate);
+            body.appendChild(content);
+            appendStages(section.stages, content, section.title);
+          } else {
+            appendStages(section.stages, body);
+          }
+        });
 
-        // Сброс всех аккордеонов
         resetAccordions();
         overlay.classList.add('active');
-
-        document.getElementById('modalBody').scrollTop = 0;
+        body.scrollTop = 0;
       }
 
       function closeProjectModal() {
         document.getElementById('projectModalOverlay').classList.remove('active');
         resetAccordions();
-        // Останавливаем все видео
         Object.keys(viewers).forEach(vid => {
           const v = viewers[vid];
-          if (v && v.video) {
-            v.video.pause();
-          }
+          if (v && v.video) v.video.pause();
         });
       }
 
@@ -905,7 +936,9 @@
         if (e.target === e.currentTarget) closeProjectModal();
       });
 
-      // --- 3. Сброс всех аккордеонов (мгновенно, без анимации) ---
+      // ============================================================
+      //  9. СБРОС АККОРДЕОНОВ
+      // ============================================================
       function resetAccordions() {
         document.querySelectorAll('.version-plate').forEach(plate => {
           plate.classList.remove('expanded');
@@ -915,42 +948,31 @@
         document.querySelectorAll('.expanded-content, .member-acc-content').forEach(collapseAccInstant);
       }
 
-      // --- 4. Родительский аккордеон ---
       function toggleParentAccordion(plate) {
         const content = plate.nextElementSibling;
         toggleAcc(plate, content);
         if (!plate.classList.contains('expanded')) {
-          // при сворачивании большого раздела возвращаемся к началу списка
           document.getElementById('modalBody').scrollTop = 0;
         }
       }
 
-      // --- 5. Аккордеон версии (каждая версия независима, другие не скрываются) ---
       function toggleVersionContent(plate) {
         const content = plate.nextElementSibling;
         toggleAcc(plate, content);
       }
 
-      // --- 5a. Аккордеон в модалке участника ---
       function toggleMemberAccordion(plate) {
         const content = plate.nextElementSibling;
         toggleAcc(plate, content);
       }
 
-      // --- 6. Сворачивание всех версий ---
-      function collapseAllVersions() {
-        resetAccordions();
-        document.getElementById('modalBody').scrollTop = 0;
-      }
-
-      // --- 7. Модальное окно участника (со стрелками листания) ---
-
-      // Индекс участника в MEMBER_LIST (для переходов назад/вперёд)
+      // ============================================================
+      //  10. МОДАЛКА УЧАСТНИКА
+      // ============================================================
       function memberIndex(name) {
         return MEMBER_LIST.findIndex(m => m.name === name);
       }
 
-      // Переход к предыдущему/следующему участнику (по кругу)
       function navigateMember(dir) {
         const overlay = document.getElementById('memberModalOverlay');
         if (!overlay) return;
@@ -963,52 +985,17 @@
       }
 
       function openMemberModal(name, imgSrc) {
-        // Если открыта другая модалка участника — заменяем её
         const existing = document.getElementById('memberModalOverlay');
         if (existing) existing.remove();
 
         const overlay = document.createElement('div');
         overlay.id = 'memberModalOverlay';
         overlay.dataset.memberName = name;
-        overlay.style.cssText = `
-          position:fixed; top:0; left:0; right:0; bottom:0;
-          background:rgba(0,0,0,0.92); z-index:3000;
-          display:flex; justify-content:center; align-items:center;
-          padding:20px;
-        `;
         overlay.classList.add('modal-overlay');
+        overlay.style.cssText = 'z-index:3000;';
         overlay.style.display = 'flex';
 
-        // Клик по фону: слева от модалки — предыдущий участник,
-        // справа — следующий, сверху/снизу — закрыть
-        overlay.addEventListener('click', (e) => {
-          if (e.target !== overlay) return;
-          const rect = modal.getBoundingClientRect();
-          if (e.clientX < rect.left) { navigateMember(-1); return; }
-          if (e.clientX > rect.right) { navigateMember(1); return; }
-          overlay.remove();
-        });
-
-        // Стрелка «предыдущий» слева
-        const navPrev = document.createElement('button');
-        navPrev.className = 'member-nav-btn member-nav-prev';
-        navPrev.title = 'Предыдущий участник';
-        navPrev.textContent = '\u2039';
-        navPrev.addEventListener('click', (e) => {
-          e.stopPropagation();
-          navigateMember(-1);
-        });
-
-        // Стрелка «следующий» справа
-        const navNext = document.createElement('button');
-        navNext.className = 'member-nav-btn member-nav-next';
-        navNext.title = 'Следующий участник';
-        navNext.textContent = '\u203A';
-        navNext.addEventListener('click', (e) => {
-          e.stopPropagation();
-          navigateMember(1);
-        });
-
+        // Собираем окно ДО навешивания обработчика фона
         const modal = document.createElement('div');
         modal.style.cssText = `
           background:var(--panel); border:1px solid var(--border);
@@ -1021,15 +1008,18 @@
         `;
 
         const header = document.createElement('div');
-        header.style.cssText = `padding:14px 18px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-shrink:0;`;
+        header.style.cssText = 'padding:14px 18px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-shrink:0;';
         const h3 = document.createElement('h3');
         h3.textContent = name;
-        h3.style.cssText = `margin:0; color:#fff; font-family:'JetBrains Mono',monospace; font-weight:700; font-size:1.3rem;`;
+        h3.style.cssText = "margin:0; color:#fff; font-family:'JetBrains Mono',monospace; font-weight:700; font-size:1.3rem;";
         const closeBtn = document.createElement('button');
+        closeBtn.type = 'button';
         closeBtn.textContent = '\u00D7';
-        closeBtn.style.cssText = `background:none; border:none; color:var(--muted); cursor:pointer; font-size:1.6rem; line-height:1; padding:0 4px; flex-shrink:0;`;
+        closeBtn.style.cssText = 'background:none; border:none; color:var(--muted); cursor:pointer; font-size:1.6rem; line-height:1; padding:0 4px; flex-shrink:0;';
         closeBtn.addEventListener('click', () => overlay.remove());
-        header.appendChild(h3); header.appendChild(closeBtn); modal.appendChild(header);
+        header.appendChild(h3);
+        header.appendChild(closeBtn);
+        modal.appendChild(header);
 
         const content = document.createElement('div');
         content.className = 'member-modal-content';
@@ -1046,9 +1036,8 @@
         rolesHeader.textContent = 'Профессии';
         infoSide.appendChild(rolesHeader);
 
-        // Аккордеоны по проектам
         const accordionWrap = document.createElement('div');
-        accordionWrap.style.cssText = `padding: 0.4rem 1.2rem 1.2rem; overflow-y: auto; -webkit-overflow-scrolling: touch; flex: 1; min-height: 0;`;
+        accordionWrap.style.cssText = 'padding: 0.4rem 1.2rem 1.2rem; overflow-y: auto; -webkit-overflow-scrolling: touch; flex: 1; min-height: 0;';
 
         const memberProjects = memberRoles[name] || [];
         memberProjects.forEach(({ project, roles }) => {
@@ -1066,9 +1055,6 @@
           plate.appendChild(plateTitle);
           plate.appendChild(plateArrow);
 
-          // Внешний блок (.member-acc-content) — анимируется по высоте,
-          // отступы живут внутри (.member-acc-inner), поэтому контейнер
-          // сжимается ровно в ноль без «торчащих хвостов»
           const accContent = document.createElement('div');
           accContent.className = 'member-acc-content';
           const accInner = document.createElement('div');
@@ -1087,35 +1073,91 @@
         });
         infoSide.appendChild(accordionWrap);
 
-        content.appendChild(imgSide); content.appendChild(infoSide);
+        content.appendChild(imgSide);
+        content.appendChild(infoSide);
         modal.appendChild(content);
-
         overlay.appendChild(modal);
+
+        // Кнопки листания — создаём и добавляем ДО обработчика фона
+        const navPrev = document.createElement('button');
+        navPrev.type = 'button';
+        navPrev.className = 'member-nav-btn member-nav-prev';
+        navPrev.title = 'Предыдущий участник';
+        navPrev.textContent = '\u2039';
+        navPrev.addEventListener('click', (e) => {
+          e.stopPropagation();
+          navigateMember(-1);
+        });
+
+        const navNext = document.createElement('button');
+        navNext.type = 'button';
+        navNext.className = 'member-nav-btn member-nav-next';
+        navNext.title = 'Следующий участник';
+        navNext.textContent = '\u203A';
+        navNext.addEventListener('click', (e) => {
+          e.stopPropagation();
+          navigateMember(1);
+        });
+
         overlay.appendChild(navPrev);
         overlay.appendChild(navNext);
+
+        // Теперь можно безопасно вешать обработчик фона — modal уже определён
+        overlay.addEventListener('click', (e) => {
+          if (e.target !== overlay) return;
+          const rect = modal.getBoundingClientRect();
+          if (e.clientX < rect.left) { navigateMember(-1); return; }
+          if (e.clientX > rect.right) { navigateMember(1); return; }
+          overlay.remove();
+        });
+
         document.body.appendChild(overlay);
       }
 
-      // --- 8. ЛОГИКА ПРОСМОТРЩИКА ---
+      // ============================================================
+      //  11. ПРОСМОТРЩИК
+      // ============================================================
       const viewers = {};
 
-      const PLAY_ICON = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
-      const PAUSE_ICON = '<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+      // Единый глобальный набор обработчиков — не даём накапливаться
+      function attachGlobalPointerListeners() {
+        if (globalPointerListenersAttached) return;
+        globalPointerListenersAttached = true;
+
+        window.addEventListener('mouseup', () => {
+          if (activeDragVid) {
+            const vid = activeDragVid;
+            activeDragVid = null;
+            handleMouseUp(vid);
+          }
+        });
+        window.addEventListener('mousemove', (e) => {
+          if (activeDragVid) handleMouseMove(e, activeDragVid);
+        });
+        window.addEventListener('touchend', () => {
+          if (activeDragVid) {
+            const vid = activeDragVid;
+            activeDragVid = null;
+            handleTouchEnd(vid);
+          }
+        });
+      }
 
       function initViewer(vid) {
         const container = document.querySelector('[data-viewer="' + vid + '"]');
         if (!container) return;
 
+        // Клонируем, чтобы гарантированно снять старые inline-обработчики
         const newContainer = container.cloneNode(true);
         container.parentNode.replaceChild(newContainer, container);
 
-        const newImg = newContainer.querySelector('.viewer-image');
+        const newImg   = newContainer.querySelector('.viewer-image');
         const newVideo = newContainer.querySelector('.viewer-video');
         const newFsBtn = newContainer.querySelector('.fs-btn');
         const newDlBtn = newContainer.querySelector('.dl-btn');
 
-        if (newFsBtn) newFsBtn.setAttribute('onclick', 'toggleFullscreen(\'' + vid + '\')');
-        if (newDlBtn) newDlBtn.setAttribute('onclick', 'downloadMedia(\'' + vid + '\', event)');
+        if (newFsBtn) newFsBtn.addEventListener('click', () => toggleFullscreen(vid));
+        if (newDlBtn) newDlBtn.addEventListener('click', (e) => downloadMedia(vid, e));
 
         viewers[vid] = {
           panX: 0, panY: 0, scale: 1,
@@ -1132,76 +1174,55 @@
 
         newContainer.addEventListener('wheel', (e) => handleWheel(e, vid), { passive: false });
         newContainer.addEventListener('mousedown', (e) => handleMouseDown(e, vid));
-        window.addEventListener('mouseup', () => handleMouseUp(vid));
-        window.addEventListener('mousemove', (e) => handleMouseMove(e, vid));
         newContainer.addEventListener('touchstart', (e) => handleTouchStart(e, vid), { passive: false });
-        newContainer.addEventListener('touchmove', (e) => handleTouchMove(e, vid), { passive: false });
-        window.addEventListener('touchend', () => handleTouchEnd(vid));
+        newContainer.addEventListener('touchmove',  (e) => handleTouchMove(e, vid),  { passive: false });
 
-        if (newVideo) {
-          initVideoControls(vid, newContainer, newVideo);
-        }
+        attachGlobalPointerListeners();
+
+        if (newVideo) initVideoControls(vid, newContainer, newVideo);
 
         updateTransform(vid);
       }
 
-      // --- 8a. СКАЧИВАНИЕ МЕДИА ---
+      // ============================================================
+      //  12. СКАЧИВАНИЕ
+      // ============================================================
       function downloadMedia(vid, ev) {
-        // Немедленно останавливаем всплытие, чтобы не сработал fullscreen
         if (ev) {
           ev.stopPropagation();
           ev.preventDefault();
-        }
-        if (window.event) {
-          window.event.stopPropagation();
-          window.event.preventDefault();
         }
 
         const v = viewers[vid];
         if (!v) return;
 
         let src = '';
-
         if (v.isVideo && v.video) {
           const source = v.video.querySelector('source');
           src = source ? source.src : v.video.src;
         } else if (v.img) {
           src = v.img.src;
         }
-
         if (!src) return;
 
-        // Расширение берём из имени файла — так работает и png, и mp4
         const filename = decodeURIComponent(src.split('/').pop() || 'file');
         const dotIndex = filename.lastIndexOf('.');
-        let baseName = dotIndex > 0 ? filename.slice(0, dotIndex) : filename;
+        const baseName = dotIndex > 0 ? filename.slice(0, dotIndex) : filename;
         const ext = dotIndex > 0 ? filename.slice(dotIndex) : (v.isVideo ? '.mp4' : '.png');
 
-        // Показываем диалог ввода имени
-        dlPending = { src: src, ext: ext };
+        dlPending = { src, ext };
         const input = document.getElementById('dlFilenameInput');
         const extSpan = document.getElementById('dlFileExt');
         input.value = baseName;
         extSpan.textContent = ext;
 
-        const overlay = document.getElementById('dlDialogOverlay');
-        overlay.style.display = 'flex';
+        document.getElementById('dlDialogOverlay').style.display = 'flex';
 
-        // Фокус на инпут + выделение
-        setTimeout(() => {
-          input.focus();
-          input.select();
-        }, 50);
+        setTimeout(() => { input.focus(); input.select(); }, 50);
 
-        // Enter = скачать, Escape = отмена
-        input.onkeydown = function(e) {
-          if (e.key === 'Enter') {
-            e.preventDefault();
-            confirmDlDownload();
-          } else if (e.key === 'Escape') {
-            e.preventDefault();
-            closeDlDialog();
-          }
+        input.onkeydown = function (e) {
+          if (e.key === 'Enter') { e.preventDefault(); confirmDlDownload(); }
+          else if (e.key === 'Escape') { e.preventDefault(); closeDlDialog(); }
         };
       }
 
@@ -1215,34 +1236,31 @@
 
         const input = document.getElementById('dlFilenameInput');
         let name = input.value.trim();
-
-        // Удаляем любые расширения, которые пользователь мог вписать
         name = name.replace(/\.[^.]+$/, '');
-        // Удаляем недопустимые символы для имени файла
         name = name.replace(/[\\/:*?"<>|]/g, '_');
         if (!name) name = 'file';
 
         const fullFilename = name + dlPending.ext;
 
-        // Создаём ссылку с download-атрибутом — это вызовет окно сохранения
         const a = document.createElement('a');
         a.href = dlPending.src;
         a.download = fullFilename;
         a.style.display = 'none';
         document.body.appendChild(a);
         a.click();
-        // Удаляем ссылку
         setTimeout(() => { document.body.removeChild(a); }, 200);
 
         closeDlDialog();
       }
 
-      // --- 9. УПРАВЛЕНИЕ ВИДЕО ---
+      // ============================================================
+      //  13. УПРАВЛЕНИЕ ВИДЕО
+      // ============================================================
       function initVideoControls(vid, container, video) {
-        const playBtn = container.querySelector('[data-play-btn="' + vid + '"]');
-        const slider = container.querySelector('[data-slider="' + vid + '"]');
+        const playBtn     = container.querySelector('[data-play-btn="' + vid + '"]');
+        const slider      = container.querySelector('[data-slider="' + vid + '"]');
         const timeDisplay = container.querySelector('[data-time="' + vid + '"]');
-        const controls = container.querySelector('[data-controls="' + vid + '"]');
+        const controls    = container.querySelector('[data-controls="' + vid + '"]');
 
         if (!playBtn || !slider || !timeDisplay) return;
 
@@ -1252,7 +1270,7 @@
           else video.pause();
         });
 
-        video.addEventListener('play', () => { playBtn.innerHTML = PAUSE_ICON; });
+        video.addEventListener('play',  () => { playBtn.innerHTML = PAUSE_ICON; });
         video.addEventListener('pause', () => { playBtn.innerHTML = PLAY_ICON; });
 
         video.addEventListener('timeupdate', () => {
@@ -1280,24 +1298,16 @@
         slider.addEventListener('touchstart', (e) => e.stopPropagation(), { passive: true });
 
         let hideTimer = null;
-        container.addEventListener('mousemove', () => {
-          if (controls) {
-            controls.classList.remove('hidden');
-            clearTimeout(hideTimer);
-            hideTimer = setTimeout(() => {
-              if (!video.paused) controls.classList.add('hidden');
-            }, 2500);
-          }
-        });
-        container.addEventListener('touchstart', () => {
-          if (controls) {
-            controls.classList.remove('hidden');
-            clearTimeout(hideTimer);
-            hideTimer = setTimeout(() => {
-              if (!video.paused) controls.classList.add('hidden');
-            }, 2500);
-          }
-        }, { passive: true });
+        const showControls = () => {
+          if (!controls) return;
+          controls.classList.remove('hidden');
+          clearTimeout(hideTimer);
+          hideTimer = setTimeout(() => {
+            if (!video.paused) controls.classList.add('hidden');
+          }, 2500);
+        };
+        container.addEventListener('mousemove', showControls);
+        container.addEventListener('touchstart', showControls, { passive: true });
 
         video.addEventListener('click', (e) => {
           const v = viewers[vid];
@@ -1316,7 +1326,9 @@
         return m + ':' + (s < 10 ? '0' : '') + s;
       }
 
-      // --- 10. Трансформация (pan/zoom) ---
+      // ============================================================
+      //  14. ТРАНСФОРМАЦИЯ (pan/zoom)
+      // ============================================================
       function getRelativePoint(v, clientX, clientY) {
         const rect = v.container.getBoundingClientRect();
         return { x: clientX - (rect.left + rect.width / 2), y: clientY - (rect.top + rect.height / 2) };
@@ -1345,6 +1357,7 @@
         v.lastX = e.clientX - v.panX;
         v.lastY = e.clientY - v.panY;
         v.container.style.cursor = 'grabbing';
+        activeDragVid = vid;
       }
 
       function handleMouseUp(vid) {
@@ -1368,17 +1381,26 @@
         if (!v || !v.isFullscreen) return;
         const touches = e.touches;
         if (touches.length >= 2) {
-          v.initialDistance = Math.hypot(touches[0].clientX - touches[1].clientX, touches[0].clientY - touches[1].clientY);
+          v.initialDistance = Math.hypot(
+            touches[0].clientX - touches[1].clientX,
+            touches[0].clientY - touches[1].clientY
+          );
           v.initialScale = v.scale;
           v.initialPanX = v.panX;
           v.initialPanY = v.panY;
           v.isDragging = false;
-          const pt = getRelativePoint(v, (touches[0].clientX + touches[1].clientX) / 2, (touches[0].clientY + touches[1].clientY) / 2);
-          v.pinchCenterX = pt.x; v.pinchCenterY = pt.y;
+          if (activeDragVid === vid) activeDragVid = null;
+          const pt = getRelativePoint(v,
+            (touches[0].clientX + touches[1].clientX) / 2,
+            (touches[0].clientY + touches[1].clientY) / 2
+          );
+          v.pinchCenterX = pt.x;
+          v.pinchCenterY = pt.y;
         } else if (touches.length === 1) {
           v.lastX = touches[0].clientX - v.panX;
           v.lastY = touches[0].clientY - v.panY;
           v.isDragging = true;
+          activeDragVid = vid;
         }
       }
 
@@ -1388,9 +1410,15 @@
         e.preventDefault();
         const touches = e.touches;
         if (touches.length >= 2) {
-          const currentDistance = Math.hypot(touches[0].clientX - touches[1].clientX, touches[0].clientY - touches[1].clientY);
+          const currentDistance = Math.hypot(
+            touches[0].clientX - touches[1].clientX,
+            touches[0].clientY - touches[1].clientY
+          );
           const newScale = Math.max(0.1, Math.min(4, v.initialScale * (currentDistance / v.initialDistance)));
-          const pt = getRelativePoint(v, (touches[0].clientX + touches[1].clientX) / 2, (touches[0].clientY + touches[1].clientY) / 2);
+          const pt = getRelativePoint(v,
+            (touches[0].clientX + touches[1].clientX) / 2,
+            (touches[0].clientY + touches[1].clientY) / 2
+          );
           const ratio = newScale / v.initialScale;
           v.panX = pt.x * (1 - ratio) + v.initialPanX * ratio;
           v.panY = pt.y * (1 - ratio) + v.initialPanY * ratio;
@@ -1415,10 +1443,10 @@
         if (!el) return;
         if (v.isFullscreen) {
           el.style.transform = 'translate(' + v.panX + 'px, ' + v.panY + 'px) scale(' + v.scale + ')';
-          if (v.isVideo) v.video.classList.add('can-drag'); else el.classList.add('can-drag');
+          el.classList.add('can-drag');
         } else {
           el.style.transform = 'translate(0px, 0px) scale(1)';
-          if (v.isVideo) v.video.classList.remove('can-drag'); else el.classList.remove('can-drag');
+          el.classList.remove('can-drag');
         }
       }
 
@@ -1426,55 +1454,44 @@
         const v = viewers[vid];
         if (!v) return;
         const container = v.container;
+
         if (!v.isFullscreen) {
-          if (container.requestFullscreen) {
-            container.requestFullscreen().then(() => {
-              v.isFullscreen = true; v.scale = 1; v.panX = 0; v.panY = 0; updateTransform(vid);
-            }).catch(err => console.error(err));
-          } else if (container.webkitRequestFullscreen) {
-            container.webkitRequestFullscreen();
-            v.isFullscreen = true; v.scale = 1; v.panX = 0; v.panY = 0; updateTransform(vid);
-          }
+          const req = container.requestFullscreen || container.webkitRequestFullscreen;
+          if (!req) return;
+          Promise.resolve(req.call(container)).then(() => {
+            v.isFullscreen = true;
+            v.scale = 1; v.panX = 0; v.panY = 0;
+            updateTransform(vid);
+          }).catch(err => console.error(err));
         } else {
-          if (document.exitFullscreen) {
-            document.exitFullscreen().then(() => {
-              v.isFullscreen = false; v.scale = 1; v.panX = 0; v.panY = 0; updateTransform(vid);
-            });
-          } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-            v.isFullscreen = false; v.scale = 1; v.panX = 0; v.panY = 0; updateTransform(vid);
-          }
+          const exit = document.exitFullscreen || document.webkitExitFullscreen;
+          if (!exit) return;
+          Promise.resolve(exit.call(document)).then(() => {
+            v.isFullscreen = false;
+            v.scale = 1; v.panX = 0; v.panY = 0;
+            updateTransform(vid);
+          });
         }
       }
 
-      document.addEventListener('fullscreenchange', () => {
-        const fsEl = document.fullscreenElement;
+      function handleFullscreenChange(fsEl) {
         Object.keys(viewers).forEach(vid => {
           const v = viewers[vid];
+          if (!v) return;
           if (!fsEl || !v.container.contains(fsEl)) {
-            v.isFullscreen = false; v.scale = 1; v.panX = 0; v.panY = 0;
+            v.isFullscreen = false;
+            v.scale = 1; v.panX = 0; v.panY = 0;
           }
           updateTransform(vid);
         });
-      });
-      document.addEventListener('webkitfullscreenchange', () => {
-        const fsEl = document.webkitFullscreenElement;
-        Object.keys(viewers).forEach(vid => {
-          const v = viewers[vid];
-          if (!fsEl || !v.container.contains(fsEl)) {
-            v.isFullscreen = false; v.scale = 1; v.panX = 0; v.panY = 0;
-          }
-          updateTransform(vid);
-        });
-      });
+      }
 
-      // --- 12. ЗАПУСК ИНТРО ---
-      window.addEventListener('load', () => {
-        const introLoad = document.getElementById('intro');
-        if (introLoad) setTimeout(() => { introLoad.style.opacity = '1'; }, 50);
-      });
+      document.addEventListener('fullscreenchange',       () => handleFullscreenChange(document.fullscreenElement));
+      document.addEventListener('webkitfullscreenchange', () => handleFullscreenChange(document.webkitFullscreenElement));
 
-      // --- 13. АДАПТИВНОСТЬ ---
+      // ============================================================
+      //  15. РЕСАЙЗ / ОРИЕНТАЦИЯ
+      // ============================================================
       function onResize() {
         Object.keys(viewers).forEach(vid => {
           const v = viewers[vid];
@@ -1484,14 +1501,18 @@
       window.addEventListener('resize', onResize);
       window.addEventListener('orientationchange', () => { setTimeout(onResize, 300); });
 
-      // --- 14. ПРОВЕРКА НАЛИЧИЯ ИЗОБРАЖЕНИЙ ---
+      // ============================================================
+      //  16. ДИАГНОСТИКА ЗАГРУЗКИ ИЗОБРАЖЕНИЙ
+      // ============================================================
       window.addEventListener('error', (e) => {
         if (e.target && e.target.tagName === 'IMG') {
           console.warn('Картинка не загружена:', e.target.src);
         }
       }, true);
 
-      // --- 15. ЗАКРЫТИЕ МОДАЛЬНЫХ ОКОН ПО ESC + ЛИСТАНИЕ СТРЕЛКАМИ ---
+      // ============================================================
+      //  17. КЛАВИАТУРА
+      // ============================================================
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
           const dlOverlay = document.getElementById('dlDialogOverlay');
@@ -1502,7 +1523,6 @@
           const memberOverlay = document.getElementById('memberModalOverlay');
           if (memberOverlay) memberOverlay.remove();
         }
-        // Стрелки клавиатуры листают участников, если открыта их модалка
         if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
           const memberOverlay = document.getElementById('memberModalOverlay');
           if (memberOverlay) {
@@ -1523,9 +1543,17 @@
         }
       });
 
-      // Клик по фону диалога скачивания — закрытие
+      // Клик по фону диалога скачивания
       document.getElementById('dlDialogOverlay').addEventListener('click', (e) => {
         if (e.target === e.currentTarget) closeDlDialog();
+      });
+
+      // Закрытие модалки проекта по Escape (дополняет общий обработчик)
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          const overlay = document.getElementById('projectModalOverlay');
+          if (overlay && overlay.classList.contains('active')) closeProjectModal();
+        }
       });
     </script>
   </body>
